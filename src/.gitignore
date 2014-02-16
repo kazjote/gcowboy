@@ -1,0 +1,5 @@
+.deps
+gcowboy
+*.c
+*.o
+*.stamp
