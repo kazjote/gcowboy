@@ -1,7 +1,8 @@
 ## Process this file with automake to produce Makefile.in
 ## Created by Anjuta
 
-SUBDIRS = src 
+SUBDIRS = src \
+	test
 
 gcowboydocdir = ${prefix}/doc/gcowboy
 gcowboydoc_DATA = \
@@ -14,7 +15,6 @@ gcowboydoc_DATA = \
 
 
 EXTRA_DIST = $(gcowboydoc_DATA)
-
 
 # Remove doc directory on uninstall
 uninstall-local:

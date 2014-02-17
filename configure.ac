@@ -19,11 +19,10 @@ dnl Check for vala
 AM_PROG_VALAC([0.10.0])
 
 
-PKG_CHECK_MODULES(GCOWBOY, [gtk+-3.0 ])
-
+PKG_CHECK_MODULES(GCOWBOY, [gtk+-3.0 gee-1.0])
 
 AC_OUTPUT([
 Makefile
 src/Makefile
-
+test/Makefile
 ])

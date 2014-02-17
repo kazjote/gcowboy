@@ -1,6 +1,4 @@
-/* -*- Mode: C; indent-tabs-mode: t; c-basic-offset: 4; tab-width: 4 -*-  */
 /*
- * main.c
  * Copyright (C) 2014 Kacper Bielecki <kazjote@gmail.com>
  * 
  * GCowboy is free software: you can redistribute it and/or modify it
