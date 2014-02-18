@@ -7,7 +7,7 @@
 
 using Gee;
 
-class HttpProxyMock : HttpProxyInterface
+class HttpProxyMock : Object, HttpProxyInterface
 {
 
     ArrayList<string> recordedQueries;
@@ -43,9 +43,13 @@ void add_foo_tests () {
 
     Test.add_func ("/rtm/authenticate", () => {
         var proxy = new HttpProxyMock();
-        var rtm = new Rtm("apikey", proxy);
+        var rtm = new Rtm("apikey", "secret", proxy);
 
-        assert (proxy.getRecordedQueries().contains("http://"));
+        rtm.authenticate ();
+
+        // Digest::MD5.hexdigest('secretapi_keyapikeypermsread,write')
+        assert (proxy.getRecordedQueries ().
+                      contains ("http://www.rememberthemilk.com/services/auth/?api_key=apikey&perms=read,write&api_sig=74156eef9f5454d55556e8d3de077dc1"));
     });
 }
 

@@ -15,7 +15,7 @@
  * with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-public interface HttpProxyInterface
+public interface HttpProxyInterface : Object
 {
     public abstract string request (string uri);
 }

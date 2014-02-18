@@ -11,11 +11,12 @@ AM_CPPFLAGS = \
 	-DPACKAGE_LOCALE_DIR=\""$(localedir)"\" \
 	-DPACKAGE_SRC_DIR=\""$(srcdir)"\" \
 	-DPACKAGE_DATA_DIR=\""$(pkgdatadir)"\" \
-	$(GCOWBOY_CFLAGS)
+	$(GCOWBOY_CFLAGS) $(GEE_CFLAGS)
 
 AM_CFLAGS =\
 	 -Wall\
-	 -g
+	 -g \
+	 $(GEE_CFLAGS)
 
 bin_PROGRAMS = gcowboy
 
@@ -23,10 +24,10 @@ gcowboy_SOURCES = \
 	gcowboy.vala config.vapi rtm.vala http_proxy_interface.vala
 
 gcowboy_VALAFLAGS =  \
-	--pkg gtk+-3.0
+	--pkg gtk+-3.0 --pkg gee-1.0
 
 gcowboy_LDFLAGS = \
-	-Wl,--export-dynamic
+	-Wl,--export-dynamic,$(GEE_LIBS)
 
 gcowboy_LDADD = $(GCOWBOY_LIBS)
 

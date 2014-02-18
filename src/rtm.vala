@@ -17,8 +17,74 @@
 
 public class Rtm : Object
 {
-    public Rtm(string api_key, string secret, HttpProxyInterface proxy)
+    class Entry : Object
     {
+        public string key;
+        public string val;
+
+        public Entry (string key, string val)
+        {
+            this.key = key;
+            this.val = val;
+        }
+    }
+
+    private HttpProxyInterface proxy;
+    private string api_key;
+    private string secret;
+
+    public Rtm (string api_key, string secret, HttpProxyInterface proxy)
+    {
+        this.proxy = proxy;
+        this.api_key = api_key;
+        this.secret = secret;
+    }
+
+    public void authenticate ()
+    {
+        var parameters = new List<Entry> ();
+
+        parameters.append (new Entry ("api_key", this.api_key));
+        parameters.append (new Entry ("perms", "read,write"));
+
+        var query = create_signed_query (parameters);
+
+        proxy.request("http://www.rememberthemilk.com/services/auth/?" + query);
+    }
+
+    private string create_signed_query (List<Entry> parameters)
+    {
+        parameters.sort ((a,b) => {
+            if (a.key == b.key) return 0;
+
+            return a.key > b.key ? 1 : -1;
+        });
+
+        string to_sign = "";
+
+        parameters.foreach ((entry) => {
+            to_sign += entry.key + entry.val;
+        });
+
+        to_sign = this.secret + to_sign;
+
+        var checksum = new Checksum (ChecksumType.MD5);
+
+        print (to_sign + "\n");
+
+        var to_sign_array = (uchar[]) to_sign.to_utf8 ();
+
+        checksum.update (to_sign_array, to_sign_array.length);
+        var signature = checksum.get_string ();
+
+        var query = "";
+        parameters.foreach ((entry) => {
+            query += entry.key + "=" + entry.val + "&";
+        });
+
+        query += "api_sig=" + signature;
+
+        return query;
     }
 }
 
