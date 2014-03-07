@@ -24,5 +24,6 @@ PKG_CHECK_MODULES(GCOWBOY, [gtk+-3.0 gee-1.0])
 AC_OUTPUT([
 Makefile
 src/Makefile
-test/Makefile
+rtm/Makefile
+rtm/test/Makefile
 ])

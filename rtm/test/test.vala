@@ -36,26 +36,35 @@ class HttpProxyMock : Object, HttpProxyInterface
     }
 }
 
-void add_foo_tests () {
-    Test.add_func ("/vala/test", () => {
-        assert ("foo" + "bar" == "foobar");
-    });
+void add_rtm_tests () {
 
-    Test.add_func ("/rtm/authenticate", () => {
+    Test.add_func ("/rtm/get_lits", () => {
         var proxy = new HttpProxyMock();
+
+        proxy.recordAnswer (
+            "http://api.rememberthemilk.com/services/rest/?method=rtm.auth.getFrob",
+            "{'rsp': {'frob': 'abcd'} }");
+
+
         var rtm = new Rtm("apikey", "secret", proxy);
 
-        rtm.authenticate ();
+        var authenticate_url = "";
+
+        rtm.authentication.connect((t, url) => {
+            authenticate_url = url;
+        });
+
+        rtm.get_lists();
 
         // Digest::MD5.hexdigest('secretapi_keyapikeypermsread,write')
-        assert (proxy.getRecordedQueries ().
-                      contains ("http://www.rememberthemilk.com/services/auth/?api_key=apikey&perms=read,write&api_sig=74156eef9f5454d55556e8d3de077dc1"));
+        assert (authenticate_url == "http://www.rememberthemilk.com/services/auth/?api_key=apikey&frob=abcd&perms=read,write&api_sig=74156eef9f5454d55556e8d3de077dc1");
+
     });
 }
 
 void main (string[] args) {
     Test.init (ref args);
-    add_foo_tests ();
+    add_rtm_tests ();
     Test.run ();
 }
 

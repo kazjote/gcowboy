@@ -2,7 +2,8 @@
 ## Created by Anjuta
 
 SUBDIRS = src \
-	test
+	rtm \
+	rtm/test
 
 gcowboydocdir = ${prefix}/doc/gcowboy
 gcowboydoc_DATA = \

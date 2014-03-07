@@ -11,16 +11,10 @@ AM_CFLAGS =\
 	 -g \
 	 $(GEE_CFLAGS)
 
-bin_PROGRAMS = test
+librtm_a_SOURCES = \
+	rtm.vala http_proxy_interface.vala
 
-test_SOURCES = \
-	test.vala ../rtm.vala ../../src/http_proxy_interface.vala
+lib_LIBRARIES=librtm.a
 
-test_VALAFLAGS =  \
+librtm_a_VALAFLAGS =  \
 	--pkg gtk+-3.0 --pkg gee-1.0
-
-test_LDFLAGS = \
-	-Wl,--export-dynamic,$(GEE_LIBS)
-
-test_LDADD = $(GCOWBOY_LIBS)
-

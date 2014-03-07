@@ -21,7 +21,7 @@ AM_CFLAGS =\
 bin_PROGRAMS = gcowboy
 
 gcowboy_SOURCES = \
-	gcowboy.vala config.vapi rtm.vala http_proxy_interface.vala
+	gcowboy.vala config.vapi
 
 gcowboy_VALAFLAGS =  \
 	--pkg gtk+-3.0 --pkg gee-1.0

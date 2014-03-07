@@ -33,11 +33,18 @@ public class Rtm : Object
     private string api_key;
     private string secret;
 
+    public signal void authentication(string url);
+
     public Rtm (string api_key, string secret, HttpProxyInterface proxy)
     {
         this.proxy = proxy;
         this.api_key = api_key;
         this.secret = secret;
+    }
+
+    public void get_lists ()
+    {
+
     }
 
     public void authenticate ()
