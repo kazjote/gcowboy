@@ -14,7 +14,12 @@ AM_CFLAGS =\
 bin_PROGRAMS = test
 
 test_SOURCES = \
-	test.vala ../rtm.vala ../../src/http_proxy_interface.vala
+	test.vala \
+	authenticator_test.vala \
+  ../rtm.vala \
+	../requester.vala \
+	../authenticator.vala \
+	../../src/http_proxy_interface.vala
 
 test_VALAFLAGS =  \
 	--pkg gtk+-3.0 --pkg gee-1.0

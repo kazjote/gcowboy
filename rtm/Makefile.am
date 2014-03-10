@@ -12,7 +12,7 @@ AM_CFLAGS =\
 	 $(GEE_CFLAGS)
 
 librtm_a_SOURCES = \
-	rtm.vala http_proxy_interface.vala
+	rtm.vala http_proxy_interface.vala requester.vala authenticator.vala
 
 lib_LIBRARIES=librtm.a
 

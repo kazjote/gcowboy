@@ -37,8 +37,8 @@ class HttpProxyMock : Object, HttpProxyInterface
 }
 
 void add_rtm_tests () {
-
-    Test.add_func ("/rtm/get_lits", () => {
+/*
+    Test.add_func ("/rtm/get_lists", () => {
         var proxy = new HttpProxyMock();
 
         proxy.recordAnswer (
@@ -58,13 +58,14 @@ void add_rtm_tests () {
 
         // Digest::MD5.hexdigest('secretapi_keyapikeypermsread,write')
         assert (authenticate_url == "http://www.rememberthemilk.com/services/auth/?api_key=apikey&frob=abcd&perms=read,write&api_sig=74156eef9f5454d55556e8d3de077dc1");
-
     });
+    */
 }
 
 void main (string[] args) {
     Test.init (ref args);
     add_rtm_tests ();
+    add_authenticator_tests ();
     Test.run ();
 }
 
