@@ -11,6 +11,7 @@ ltmain.sh
 missing
 stamp-h1
 test_rtm
+test_app
 **/*.c
 **/*.o
 **/*.stamp
