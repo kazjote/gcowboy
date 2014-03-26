@@ -22,6 +22,12 @@ class HttpProxyMock : Object, HttpProxyInterface
     public string request (string uri)
     {
         this.recordedQueries.add(uri);
+
+        var response = this.recordedAnswers[uri];
+        if (response == null) {
+            stderr.printf (@"HttpProxyMock: Requested uri '$uri' but the answer was not recorded");
+        }
+
         return this.recordedAnswers[uri];
     }
 

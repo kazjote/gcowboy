@@ -10,6 +10,7 @@ libtool
 ltmain.sh
 missing
 stamp-h1
+test_rtm
 **/*.c
 **/*.o
 **/*.stamp

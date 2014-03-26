@@ -19,10 +19,12 @@ test_SOURCES = \
   ../rtm.vala \
 	../requester.vala \
 	../authenticator.vala \
+	../response.vala \
+	../frob.vala \
 	../../src/http_proxy_interface.vala
 
 test_VALAFLAGS =  \
-	--pkg gtk+-3.0 --pkg gee-1.0
+	--pkg gtk+-3.0 --pkg gee-1.0 --pkg libxml-2.0
 
 test_LDFLAGS = \
 	-Wl,--export-dynamic,$(GEE_LIBS)

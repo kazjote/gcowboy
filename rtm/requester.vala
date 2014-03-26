@@ -1,3 +1,5 @@
+using Xml;
+
 public class Requester : Object
 {
     class Parameter : Object
@@ -28,6 +30,17 @@ public class Requester : Object
         parameters.append (new Parameter (key, value));
     }
 
+    public Response request (string method)
+    {
+        add_parameter ("method", method);
+
+        var url = "http://www.rememberthemilk.com/services/rest?" + create_signed_query ();
+
+        var response = proxy.request (url);
+
+        return Response.factory (response, method);
+    }
+
     public string create_signed_query ()
     {
         parameters.sort ((a,b) => {
@@ -45,8 +58,6 @@ public class Requester : Object
         to_sign = this.secret + to_sign;
 
         var checksum = new Checksum (ChecksumType.MD5);
-
-        print (to_sign + "\n");
 
         var to_sign_array = (uchar[]) to_sign.to_utf8 ();
 

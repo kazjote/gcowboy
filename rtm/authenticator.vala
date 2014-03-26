@@ -17,9 +17,45 @@
 
 public class Authenticator : Object
 {
-    public Authenticator (Requester requester)
+    public signal void authorization (string url);
+
+    private HttpProxyInterface proxy;
+    private string secret;
+    private string apikey;
+    private string token;
+
+    public Authenticator (HttpProxyInterface proxy, string secret, string apikey)
     {
-        
+        this.proxy = proxy;
+        this.secret = secret;
+        this.apikey = apikey;
+    }
+
+    public void reauthenticate ()
+    {
+        var requester = new Requester (proxy, secret);
+        requester.add_parameter ("api_key", this.apikey);
+
+        Frob frob = (Frob) requester.request("rtm.auth.getFrob");
+
+        requester = new Requester (proxy, secret);
+        requester.add_parameter ("api_key", this.apikey);
+        requester.add_parameter ("perms", "read,write");
+        requester.add_parameter ("frob", frob.frob);
+
+        authorization ("http://www.rememberthemilk.com/services/auth?" + requester.create_signed_query ());
+
+        requester = new Requester (proxy, secret);
+        requester.add_parameter ("api_key", this.apikey);
+        requester.add_parameter ("frob", frob.frob);
+
+        Response response = null;
+
+        while ((response = requester.request ("rtm.auth.getToken")) == null) {
+            GLib.Thread.usleep(1000000);
+        }
+
+        this.token = ((Token) response).token;
     }
 }
 

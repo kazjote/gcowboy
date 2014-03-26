@@ -12,9 +12,14 @@ AM_CFLAGS =\
 	 $(GEE_CFLAGS)
 
 librtm_a_SOURCES = \
-	rtm.vala http_proxy_interface.vala requester.vala authenticator.vala
+	rtm.vala \
+	http_proxy_interface.vala \
+	requester.vala \
+	authenticator.vala \
+	response.vala \
+	frob.vala
 
 lib_LIBRARIES=librtm.a
 
 librtm_a_VALAFLAGS =  \
-	--pkg gtk+-3.0 --pkg gee-1.0
+	--pkg gtk+-3.0 --pkg gee-1.0 --pkg libxml-2.0
