@@ -21,6 +21,8 @@ using Gtk;
 public class Main : Object
 {
 
+    private InfoBar infobar;
+
     /* 
      * Uncomment this line when you are done testing and building a tarball
      * or installing
@@ -41,8 +43,11 @@ public class Main : Object
             builder.connect_signals (this);
 
             var window = builder.get_object ("window") as Window;
+            infobar = builder.get_object ("infobar") as InfoBar;
             /* ANJUTA: Widgets initialization for gcowboy.ui - DO NOT REMOVE */
             window.show_all ();
+
+            infobar.hide ();
         } 
         catch (Error e) {
             stderr.printf ("Could not load UI: %s\n", e.message);
@@ -63,18 +68,32 @@ public class Main : Object
 
         var rtm = new RtmWrapper ();
 
+
         rtm.authorization.connect((t, url) => {
-            stdout.printf (@"Authentication required: $url\n");
+            app.infobar.add_button ("Authorize", 1);
+
+            Container content = app.infobar.get_content_area ();
+            content.add (new Gtk.Label ("Authorization needed."));
+
+            app.infobar.show_all ();
+
+            app.infobar.response.connect ((id) => {
+                try {
+                    AppInfo.launch_default_for_uri (url, null);
+                } catch (Error e) {
+                    stderr.printf ("Can't run browser!");
+                }
+            });
         });
 
         rtm.authenticated.connect((t, token) => {
-            stdout.printf (@"New token: $token\n");
+            app.infobar.hide ();
         });
 
         rtm.authenticate (() => { });
 
         Gtk.main ();
-        
+
         return 0;
     }
 }
