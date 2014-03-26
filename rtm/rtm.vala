@@ -15,83 +15,86 @@
  * with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-public class Rtm : Object
+namespace Rtm
 {
-    class Entry : Object
+    public class Rtm : Object
     {
-        public string key;
-        public string val;
-
-        public Entry (string key, string val)
+        class Entry : Object
         {
-            this.key = key;
-            this.val = val;
+            public string key;
+            public string val;
+
+            public Entry (string key, string val)
+            {
+                this.key = key;
+                this.val = val;
+            }
         }
-    }
 
-    private HttpProxyInterface proxy;
-    private string api_key;
-    private string secret;
+        private HttpProxyInterface proxy;
+        private string api_key;
+        private string secret;
 
-    public signal void authentication(string url);
+        public signal void authentication(string url);
 
-    public Rtm (string api_key, string secret, HttpProxyInterface proxy)
-    {
-        this.proxy = proxy;
-        this.api_key = api_key;
-        this.secret = secret;
-    }
+        public Rtm (string api_key, string secret, HttpProxyInterface proxy)
+        {
+            this.proxy = proxy;
+            this.api_key = api_key;
+            this.secret = secret;
+        }
 
-    public void get_lists ()
-    {
+        public void get_lists ()
+        {
 
-    }
+        }
 
-    public void authenticate ()
-    {
-        var parameters = new List<Entry> ();
+        public void authenticate ()
+        {
+            var parameters = new List<Entry> ();
 
-        parameters.append (new Entry ("api_key", this.api_key));
-        parameters.append (new Entry ("perms", "read,write"));
+            parameters.append (new Entry ("api_key", this.api_key));
+            parameters.append (new Entry ("perms", "read,write"));
 
-        var query = create_signed_query (parameters);
+            var query = create_signed_query (parameters);
 
-        proxy.request("http://www.rememberthemilk.com/services/auth/?" + query);
-    }
+            proxy.request("http://www.rememberthemilk.com/services/auth/?" + query);
+        }
 
-    private string create_signed_query (List<Entry> parameters)
-    {
-        parameters.sort ((a,b) => {
-            if (a.key == b.key) return 0;
+        private string create_signed_query (List<Entry> parameters)
+        {
+            parameters.sort ((a,b) => {
+                if (a.key == b.key) return 0;
 
-            return a.key > b.key ? 1 : -1;
-        });
+                return a.key > b.key ? 1 : -1;
+            });
 
-        string to_sign = "";
+            string to_sign = "";
 
-        parameters.foreach ((entry) => {
-            to_sign += entry.key + entry.val;
-        });
+            parameters.foreach ((entry) => {
+                to_sign += entry.key + entry.val;
+            });
 
-        to_sign = this.secret + to_sign;
+            to_sign = this.secret + to_sign;
 
-        var checksum = new Checksum (ChecksumType.MD5);
+            var checksum = new Checksum (ChecksumType.MD5);
 
-        print (to_sign + "\n");
+            print (to_sign + "\n");
 
-        var to_sign_array = (uchar[]) to_sign.to_utf8 ();
+            var to_sign_array = (uchar[]) to_sign.to_utf8 ();
 
-        checksum.update (to_sign_array, to_sign_array.length);
-        var signature = checksum.get_string ();
+            checksum.update (to_sign_array, to_sign_array.length);
+            var signature = checksum.get_string ();
 
-        var query = "";
-        parameters.foreach ((entry) => {
-            query += entry.key + "=" + entry.val + "&";
-        });
+            var query = "";
+            parameters.foreach ((entry) => {
+                query += entry.key + "=" + entry.val + "&";
+            });
 
-        query += "api_sig=" + signature;
+            query += "api_sig=" + signature;
 
-        return query;
+            return query;
+        }
     }
 }
 

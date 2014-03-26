@@ -15,52 +15,55 @@
  * with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-public class Authenticator : Object
+namespace Rtm
 {
-    public signal void authorization (string url);
-    public signal void authenticated (string token);
-
-    private HttpProxyInterface proxy;
-    private string secret;
-    private string apikey;
-    private string token;
-
-    public Authenticator (HttpProxyInterface proxy, string secret, string apikey)
+    public class Authenticator : Object
     {
-        this.proxy = proxy;
-        this.secret = secret;
-        this.apikey = apikey;
-    }
+        public signal void authorization (string url);
+        public signal void authenticated (string token);
 
-    public void reauthenticate ()
-    {
-        var requester = new Requester (proxy, secret);
-        requester.add_parameter ("api_key", this.apikey);
+        private HttpProxyInterface proxy;
+        private string secret;
+        private string apikey;
+        private string token;
 
-        Frob frob = (Frob) requester.request("rtm.auth.getFrob");
-
-        requester = new Requester (proxy, secret);
-        requester.add_parameter ("api_key", this.apikey);
-        requester.add_parameter ("perms", "read,write");
-        requester.add_parameter ("frob", frob.frob);
-
-        authorization ("http://www.rememberthemilk.com/services/auth?" + requester.create_signed_query ());
-
-        requester = new Requester (proxy, secret);
-        requester.add_parameter ("api_key", this.apikey);
-        requester.add_parameter ("frob", frob.frob);
-
-        Response response = null;
-
-        while ((response = requester.request ("rtm.auth.getToken")) == null) {
-            GLib.Thread.usleep(1000000);
+        public Authenticator (HttpProxyInterface proxy, string secret, string apikey)
+        {
+            this.proxy = proxy;
+            this.secret = secret;
+            this.apikey = apikey;
         }
 
-        var token = ((Token) response).token;
+        public void reauthenticate ()
+        {
+            var requester = new Requester (proxy, secret);
+            requester.add_parameter ("api_key", this.apikey);
 
-        this.token = token;
+            Frob frob = (Frob) requester.request("rtm.auth.getFrob");
 
-        authenticated (token);
+            requester = new Requester (proxy, secret);
+            requester.add_parameter ("api_key", this.apikey);
+            requester.add_parameter ("perms", "read,write");
+            requester.add_parameter ("frob", frob.frob);
+
+            authorization ("http://www.rememberthemilk.com/services/auth?" + requester.create_signed_query ());
+
+            requester = new Requester (proxy, secret);
+            requester.add_parameter ("api_key", this.apikey);
+            requester.add_parameter ("frob", frob.frob);
+
+            Response response = null;
+
+            while ((response = requester.request ("rtm.auth.getToken")) == null) {
+                GLib.Thread.usleep(1000000);
+            }
+
+            var token = ((Token) response).token;
+
+            this.token = token;
+
+            authenticated (token);
+        }
     }
 }
 

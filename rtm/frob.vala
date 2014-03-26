@@ -1,17 +1,20 @@
 using Xml;
 
-public class Frob : Response
+namespace Rtm
 {
-    private string _frob;
-
-    public string frob
+    public class Frob : Response
     {
-        get { return _frob; }
-    }
+        private string _frob;
 
-    public Frob (Xml.Node* frob_child)
-    {
-        this._frob = frob_child->get_content ();
+        public string frob
+        {
+            get { return _frob; }
+        }
+
+        public Frob (Xml.Node* frob_child)
+        {
+            this._frob = frob_child->get_content ();
+        }
     }
 }
 

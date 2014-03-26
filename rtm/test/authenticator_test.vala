@@ -3,7 +3,7 @@ void add_authenticator_tests () {
     Test.add_func ("/rtm/authenticator/can be created", () => {
         var proxy = new HttpProxyMock ();
 
-        new Authenticator (proxy, "secret", "apikey");
+        new Rtm.Authenticator (proxy, "secret", "apikey");
     });
 
     Test.add_func ("/rtm/authenticator/reauthenticate", () => {
@@ -28,7 +28,7 @@ void add_authenticator_tests () {
                 </auth>
             </rsp>""");
 
-        var authenticator = new Authenticator (proxy, "secret", "apikey");
+        var authenticator = new Rtm.Authenticator (proxy, "secret", "apikey");
 
         var authorization_url = "";
         authenticator.authorization.connect((t, url) => {
