@@ -46,7 +46,7 @@ namespace Rtm
             requester.add_parameter ("perms", "read,write");
             requester.add_parameter ("frob", frob.frob);
 
-            authorization ("http://www.rememberthemilk.com/services/auth?" + requester.create_signed_query ());
+            authorization ("https://www.rememberthemilk.com/services/auth?" + requester.create_signed_query ());
 
             requester = new Requester (proxy, secret);
             requester.add_parameter ("api_key", this.apikey);

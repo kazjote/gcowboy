@@ -34,9 +34,10 @@ namespace Rtm
 
         public Response request (string method)
         {
-            add_parameter ("method", method);
+            if (!has_parameter ("method"))
+                add_parameter ("method", method);
 
-            var url = "http://www.rememberthemilk.com/services/rest?" + create_signed_query ();
+            var url = "https://api.rememberthemilk.com/services/rest/?" + create_signed_query ();
 
             var response = proxy.request (url);
 
@@ -74,6 +75,19 @@ namespace Rtm
             query += "api_sig=" + signature;
 
             return query;
+        }
+
+        private bool has_parameter (string parameter)
+        {
+            unowned List<Parameter>? found_element = parameters.find_custom(new Parameter (parameter, ""), (a, b) => {
+                if (a.key == b.key) {
+                    return 0;
+                } else {
+                    return 1;
+                }
+            });
+
+            return found_element != null;
         }
     }
 }

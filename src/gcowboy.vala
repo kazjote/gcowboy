@@ -18,7 +18,7 @@
 using GLib;
 using Gtk;
 
-public class Main : Object 
+public class Main : Object
 {
 
     /* 
@@ -34,7 +34,7 @@ public class Main : Object
     public Main ()
     {
 
-        try 
+        try
         {
             var builder = new Builder ();
             builder.add_from_file (UI_FILE);
@@ -51,7 +51,7 @@ public class Main : Object
     }
 
     [CCode (instance_pos = -1)]
-    public void on_destroy (Widget window) 
+    public void main_destroy (Widget window) 
     {
         Gtk.main_quit();
     }
@@ -60,6 +60,18 @@ public class Main : Object
     {
         Gtk.init (ref args);
         var app = new Main ();
+
+        var rtm = new RtmWrapper ();
+
+        rtm.authorization.connect((t, url) => {
+            stdout.printf (@"Authentication required: $url\n");
+        });
+
+        rtm.authenticated.connect((t, token) => {
+            stdout.printf (@"New token: $token\n");
+        });
+
+        rtm.authenticate ();
 
         Gtk.main ();
         
