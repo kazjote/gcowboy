@@ -40,11 +40,6 @@ void add_authenticator_tests () {
         assert (proxy.getRecordedQueries ().get (0) == expected_frob_url);
         assert (authorization_url == expected_auth_url);
         assert (proxy.getRecordedQueries ().get (1) == expected_token_url);
-
-        // stdout.printf(authorization_url + "\n");
-
-        // Digest::MD5.hexdigest('secretapi_keyapikeypermsread,write')
-        // assert (authorization_url == "http://www.rememberthemilk.com/services/auth/?api_key=apikey&frob=abcd&perms=read,write&api_sig=74156eef9f5454d55556e8d3de077dc1");
     });
 }
 
