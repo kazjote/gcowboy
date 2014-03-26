@@ -1,6 +1,10 @@
+public delegate void RtmResponseCallback ();
+
 public class RtmWrapper : Object
 {
     private Rtm.Authenticator authenticator;
+    private AsyncQueue<QueueMessage> _queue;
+    private QueueProcessor _queue_processor;
 
     public signal void authorization (string url);
     public signal void authenticated (string token);
@@ -16,11 +20,16 @@ public class RtmWrapper : Object
         authenticator.authenticated.connect((t, token) => {
             authenticated (token);
         });
+
+        this._queue = new AsyncQueue<QueueMessage> ();
+        this._queue_processor = new QueueProcessor (_queue);
+        this._queue_processor.run ();
     }
 
-    public void authenticate ()
+    public void authenticate (RtmResponseCallback callback)
     {
-        authenticator.reauthenticate ();
+        var message = new QueueMessage (authenticator, "authenticate", callback);
+        _queue.push (message);
     }
 }
 

@@ -71,7 +71,7 @@ public class Main : Object
             stdout.printf (@"New token: $token\n");
         });
 
-        rtm.authenticate ();
+        rtm.authenticate (() => { });
 
         Gtk.main ();
         
