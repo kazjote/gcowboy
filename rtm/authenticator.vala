@@ -18,6 +18,7 @@
 public class Authenticator : Object
 {
     public signal void authorization (string url);
+    public signal void authenticated (string token);
 
     private HttpProxyInterface proxy;
     private string secret;
@@ -55,7 +56,11 @@ public class Authenticator : Object
             GLib.Thread.usleep(1000000);
         }
 
-        this.token = ((Token) response).token;
+        var token = ((Token) response).token;
+
+        this.token = token;
+
+        authenticated (token);
     }
 }
 

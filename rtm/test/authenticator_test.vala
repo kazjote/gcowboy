@@ -35,11 +35,17 @@ void add_authenticator_tests () {
             authorization_url = url;
         });
 
+        var token = "";
+        authenticator.authenticated.connect((t, _token) => {
+            token = _token;
+        });
+
         authenticator.reauthenticate ();
 
         assert (proxy.getRecordedQueries ().get (0) == expected_frob_url);
         assert (authorization_url == expected_auth_url);
         assert (proxy.getRecordedQueries ().get (1) == expected_token_url);
+        assert (token == "Token");
     });
 }
 
