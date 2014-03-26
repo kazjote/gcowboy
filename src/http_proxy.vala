@@ -6,12 +6,12 @@ public class HttpProxy : Object, HttpProxyInterface
         var message = new Soup.Message ("GET", uri);
 
         // send the HTTP request and wait for response
-        stderr.printf (@"Request: $uri\n\n");
+        // stderr.printf (@"Request: $uri\n\n");
         session.send_message (message);
 
         var response = (string) message.response_body.data;
 
-        stderr.printf (@"Response: $response\n\n");
+        // stderr.printf (@"Response: $response\n\n");
 
         // output the XML result to stdout
         return response;
