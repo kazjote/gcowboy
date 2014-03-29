@@ -2,7 +2,7 @@ using Xml;
 
 namespace Rtm
 {
-    public class Token : Response
+    public class Token : Object
     {
         private string _token;
 
@@ -13,10 +13,6 @@ namespace Rtm
 
         public Token (Xml.Node* auth)
         {
-            while (auth->name != "auth" && auth->next != null) {
-                auth = auth->next;
-            }
-
             Xml.Node* auth_child = auth->children;
 
             if (auth_child != null) {

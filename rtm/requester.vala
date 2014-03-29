@@ -39,9 +39,11 @@ namespace Rtm
 
             var url = "https://api.rememberthemilk.com/services/rest/?" + create_signed_query ();
 
-            var response = proxy.request (url);
+            var response_body = proxy.request (url);
+            var response = new Response (response_body);
+            response.process ();
 
-            return Response.factory (response, method);
+            return response;
         }
 
         public string create_signed_query ()

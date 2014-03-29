@@ -13,6 +13,6 @@ valac \
     src/http_proxy_interface.vala \
     --Xcc=-w \
     -o test_rtm && \
-./test_rtm
+GCOWBOY_ENV=test ./test_rtm
 
 # vim: ts=4 sw=4

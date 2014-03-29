@@ -39,7 +39,7 @@ namespace Rtm
             var requester = new Requester (proxy, secret);
             requester.add_parameter ("api_key", this.apikey);
 
-            Frob frob = (Frob) requester.request("rtm.auth.getFrob");
+            Frob frob = requester.request("rtm.auth.getFrob").frob;
 
             requester = new Requester (proxy, secret);
             requester.add_parameter ("api_key", this.apikey);
@@ -54,13 +54,15 @@ namespace Rtm
 
             Response response = null;
 
-            while ((response = requester.request ("rtm.auth.getToken")) == null) {
-                GLib.Thread.usleep(2 * 1000000);
+            while (response == null || response.stat != Stat.OK) {
+                if (Environment.get_variable("GCOWBOY_ENV") != "test") {
+                    GLib.Thread.usleep(2 * 1000000);
+                }
+
+                response = requester.request ("rtm.auth.getToken");
             }
 
-            var token = ((Token) response).token;
-
-            this.token = token;
+            token = response.token.token;
 
             authenticated (token);
         }
