@@ -25,7 +25,7 @@ class QueueMessage : Object
     {
         this._authenticator = auth;
         this._method = method;
-        this._callback = () => { cb (); };
+        this._callback = (response) => { cb (response); };
     }
 }
 

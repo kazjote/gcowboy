@@ -1,4 +1,4 @@
-public delegate void RtmResponseCallback ();
+public delegate void RtmResponseCallback (Rtm.Response response);
 
 public class RtmWrapper : Object
 {
@@ -30,6 +30,12 @@ public class RtmWrapper : Object
     {
         var message = new QueueMessage (authenticator, "authenticate", callback);
         _queue.push (message);
+    }
+
+    public void get_lists (RtmResponseCallback callback)
+    {
+        var message = new QueueMessage (authenticator, "getList", callback);
+        _queue.push(message);
     }
 }
 

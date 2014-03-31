@@ -15,10 +15,12 @@ namespace Rtm
         private string response_body;
         private Token _token;
         private Frob _frob;
+        private List<TaskList> _task_lists;
 
         public Stat stat { get { return _stat; } }
         public Token token { get { return _token; } }
         public Frob frob { get { return _frob; } }
+        public List<TaskList> task_lists { get { return _task_lists; } }
 
         public Response (string body)
         {
@@ -59,6 +61,13 @@ namespace Rtm
                     break;
                 case "auth":
                     this._token = new Token (element);
+                    break;
+                case "lists":
+                    _task_lists = new List<TaskList> ();
+
+                    for (Xml.Node* iter = element->children; iter != null; iter = iter->next) {
+                        _task_lists.append (new TaskList (iter));
+                    }
                     break;
             }
         }

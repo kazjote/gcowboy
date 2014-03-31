@@ -38,7 +38,6 @@ namespace Rtm
                 add_parameter ("method", method);
 
             var url = "https://api.rememberthemilk.com/services/rest/?" + create_signed_query ();
-
             var response_body = proxy.request (url);
             var response = new Response (response_body);
             response.process ();

@@ -9,6 +9,7 @@ valac \
     rtm/response.vala \
     rtm/frob.vala \
     rtm/token.vala \
+    rtm/task_list.vala \
     src/http_proxy_interface.vala \
     src/http_proxy.vala \
     src/gcowboy.vala \

@@ -90,7 +90,12 @@ public class Main : Object
             app.infobar.hide ();
         });
 
-        rtm.authenticate (() => { });
+        rtm.get_lists ((response) => {
+            response.task_lists.foreach((task_list) => {
+                var name = task_list.name;
+                stdout.printf (@"List: $name\n");
+            });
+        });
 
         Gtk.main ();
 

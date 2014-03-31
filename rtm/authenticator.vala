@@ -25,7 +25,7 @@ namespace Rtm
         private HttpProxyInterface proxy;
         private string secret;
         private string apikey;
-        private string token;
+        private string _token;
 
         public Authenticator (HttpProxyInterface proxy, string secret, string apikey)
         {
@@ -33,6 +33,8 @@ namespace Rtm
             this.secret = secret;
             this.apikey = apikey;
         }
+
+        public string? token { get { return _token; } }
 
         public void reauthenticate ()
         {
@@ -54,7 +56,7 @@ namespace Rtm
 
             Response response = null;
 
-            while (response == null || response.stat != Stat.OK) {
+            while ((response == null) || (response.stat == Stat.FAIL)) {
                 if (Environment.get_variable("GCOWBOY_ENV") != "test") {
                     GLib.Thread.usleep(2 * 1000000);
                 }
@@ -62,9 +64,17 @@ namespace Rtm
                 response = requester.request ("rtm.auth.getToken");
             }
 
-            token = response.token.token;
+            _token = response.token.token;
 
             authenticated (token);
+        }
+
+        public void authenticate ()
+        {
+            if (_token == null)
+            {
+                reauthenticate ();
+            }
         }
     }
 }
