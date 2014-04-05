@@ -24,6 +24,7 @@ public class Main : Object
 
     private InfoBar infobar;
     private ListStore list_store;
+    private ListStore task_store;
 
     /* 
      * Uncomment this line when you are done testing and building a tarball
@@ -45,12 +46,18 @@ public class Main : Object
             builder.connect_signals (this);
 
             var window = builder.get_object ("window") as Window;
+
             var list_view = builder.get_object ("list_view") as TreeView;
             list_store = new ListStore (1, typeof (string));
             list_view.set_model (list_store);
 
+            var task_view = builder.get_object ("task_view") as TreeView;
+            task_store = new ListStore (1, typeof (string));
+            task_view.set_model (task_store);
+
             var cell = new Gtk.CellRendererText ();
-            list_view.insert_column_with_attributes (-1, "Name", cell, "text", 0);
+            list_view.insert_column_with_attributes (-1, "Lists", cell, "text", 0);
+            task_view.insert_column_with_attributes (-1, "Tasks", cell, "text", 0);
 
             infobar = builder.get_object ("infobar") as InfoBar;
             /* ANJUTA: Widgets initialization for gcowboy.ui - DO NOT REMOVE */
