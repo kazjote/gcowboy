@@ -18,6 +18,7 @@
 using GLib;
 using Gtk;
 
+
 public class Main : Object
 {
 
@@ -66,7 +67,9 @@ public class Main : Object
         Gtk.init (ref args);
         var app = new Main ();
 
-        var rtm = new RtmWrapper ();
+        var rtm_postbacks = new AsyncQueue<RtmPostback> ();
+
+        var rtm = new RtmWrapper (rtm_postbacks);
 
 
         rtm.authorization.connect((t, url) => {
@@ -97,7 +100,21 @@ public class Main : Object
             });
         });
 
-        Gtk.main ();
+        MainLoop loop = new MainLoop ();
+        TimeoutSource time = new TimeoutSource (200);
+
+        time.set_callback (() => {
+            var postback = rtm_postbacks.try_pop ();
+
+            if (postback != null) {
+                postback.postback ();
+            }
+            return true;
+        });
+
+        time.attach (loop.get_context ());
+
+        loop.run ();
 
         return 0;
     }

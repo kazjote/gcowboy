@@ -1,9 +1,11 @@
 class QueueProcessor : Object
 {
     private AsyncQueue<QueueMessage> _queue;
+    private AsyncQueue<RtmPostback> _postbacks;
 
-    public QueueProcessor (AsyncQueue<QueueMessage> queue)
+    public QueueProcessor (AsyncQueue<QueueMessage> queue, AsyncQueue<RtmPostback> postbacks)
     {
+        this._postbacks = postbacks;
         this._queue = queue;
     }
 
@@ -43,7 +45,7 @@ class QueueProcessor : Object
                 response = requester.request ("rtm.lists.getList");
             }
 
-            message.callback (response);
+            _postbacks.push (new RtmPostback (message.callback, response));
         }
 
         return null;

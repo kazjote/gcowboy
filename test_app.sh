@@ -18,6 +18,7 @@ valac \
     src/rtm_wrapper.vala \
     --Xcc=-w \
     --thread \
+    -g \
     -o test_app && \
 ./test_app
 
