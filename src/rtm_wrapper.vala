@@ -51,6 +51,8 @@ public class RtmWrapper : Object
         var message = new QueueMessage (authenticator, "getList", callback);
         _queue.push(message);
     }
+
+    public void get_tasks
 }
 
 // vim: ts=4 sw=4

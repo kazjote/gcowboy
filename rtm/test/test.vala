@@ -72,6 +72,7 @@ void main (string[] args) {
     Test.init (ref args);
     add_rtm_tests ();
     add_authenticator_tests ();
+    add_response_tests ();
     Test.run ();
 }
 
