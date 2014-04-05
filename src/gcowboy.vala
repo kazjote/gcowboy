@@ -23,6 +23,7 @@ public class Main : Object
 {
 
     private InfoBar infobar;
+    private ListStore list_store;
 
     /* 
      * Uncomment this line when you are done testing and building a tarball
@@ -44,6 +45,13 @@ public class Main : Object
             builder.connect_signals (this);
 
             var window = builder.get_object ("window") as Window;
+            var list_view = builder.get_object ("list_view") as TreeView;
+            list_store = new ListStore (1, typeof (string));
+            list_view.set_model (list_store);
+
+            var cell = new Gtk.CellRendererText ();
+            list_view.insert_column_with_attributes (-1, "Name", cell, "text", 0);
+
             infobar = builder.get_object ("infobar") as InfoBar;
             /* ANJUTA: Widgets initialization for gcowboy.ui - DO NOT REMOVE */
             window.show_all ();
@@ -94,9 +102,12 @@ public class Main : Object
         });
 
         rtm.get_lists ((response) => {
+            // app.list_store.clear ();
+
             response.task_lists.foreach((task_list) => {
-                var name = task_list.name;
-                stdout.printf (@"List: $name\n");
+                TreeIter iter;
+                app.list_store.append (out iter);
+                app.list_store.set (iter, 0, task_list.name);
             });
         });
 
