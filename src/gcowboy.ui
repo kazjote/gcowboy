@@ -42,8 +42,12 @@
                   <object class="GtkTreeView" id="list_view">
                     <property name="width_request">200</property>
                     <property name="visible">True</property>
-                    <property name="can_focus">False</property>
+                    <property name="can_focus">True</property>
+                    <property name="has_focus">True</property>
+                    <property name="is_focus">True</property>
                     <property name="vexpand">True</property>
+                    <property name="headers_clickable">False</property>
+                    <property name="activate_on_single_click">True</property>
                   </object>
                 </child>
               </object>
@@ -64,6 +68,8 @@
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
                     <property name="vexpand">True</property>
+                    <property name="headers_clickable">False</property>
+                    <property name="activate_on_single_click">True</property>
                   </object>
                 </child>
               </object>
@@ -78,6 +84,9 @@
             <property name="fill">True</property>
             <property name="position">1</property>
           </packing>
+        </child>
+        <child>
+          <placeholder/>
         </child>
       </object>
     </child>
