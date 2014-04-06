@@ -25,7 +25,6 @@ namespace Rtm
         private HttpProxyInterface proxy;
         private string secret;
         private string apikey;
-        private string _token;
 
         public Authenticator (HttpProxyInterface proxy, string secret, string apikey)
         {
@@ -34,7 +33,7 @@ namespace Rtm
             this.apikey = apikey;
         }
 
-        public string? token { get { return _token; } }
+        public string token { get; set; }
 
         public void reauthenticate ()
         {
@@ -64,14 +63,14 @@ namespace Rtm
                 response = requester.request ("rtm.auth.getToken");
             }
 
-            _token = response.token.token;
+            token = response.token.token;
 
             authenticated (token);
         }
 
         public void authenticate ()
         {
-            if (_token == null)
+            if (token == "")
             {
                 reauthenticate ();
             }

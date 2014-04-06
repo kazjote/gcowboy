@@ -42,6 +42,11 @@ public class RtmWrapper : Object
         this._queue_processor.run ();
     }
 
+    public void set_token (string token)
+    {
+        authenticator.token = token;
+    }
+
     public void authenticate (RtmResponseCallback callback)
     {
         var message = new QueueMessage (authenticator, "authenticate", callback);

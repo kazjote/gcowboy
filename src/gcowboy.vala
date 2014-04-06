@@ -128,7 +128,17 @@ public class Main : Object
 
         var rtm_postbacks = new AsyncQueue<RtmPostback> ();
 
+        var token_file_path = Environment.get_home_dir () + "/.gcowboy_token";
+
+        var file = File.new_for_path (token_file_path);
+
         var rtm = new RtmWrapper (rtm_postbacks);
+
+        if (file.query_exists ()) {
+            var dis = new DataInputStream (file.read ());
+            var token = dis.read_line ();
+            rtm.set_token (token);
+        }
 
         var app = new Main (rtm);
 
@@ -151,6 +161,14 @@ public class Main : Object
 
         rtm.authenticated.connect((t, token) => {
             app.infobar.hide ();
+
+            file = File.new_for_path (token_file_path);
+
+            if (file.query_exists ()) file.delete ();
+
+            var dos = new DataOutputStream (file.create (FileCreateFlags.REPLACE_DESTINATION));
+
+            dos.put_string (token);
         });
 
         rtm.get_lists ((response) => {

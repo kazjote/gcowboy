@@ -3,6 +3,7 @@ valac \
     --pkg gee-1.0 \
     --pkg libxml-2.0 \
     --pkg libsoup-2.4 \
+    --pkg gio-2.0 \
     rtm/rtm.vala \
     rtm/requester.vala \
     rtm/authenticator.vala \
