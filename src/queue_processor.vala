@@ -31,8 +31,12 @@ class QueueProcessor : Object
 
             requester.add_parameter ("api_key", "7dfc8cb9f7985d712e355ee4526d5c88");
             requester.add_parameter ("auth_token", message.authenticator.token);
+            if (message.list_id != null)
+                requester.add_parameter ("list_id", message.list_id.to_string ());
+            if (message.filter != null)
+                requester.add_parameter ("filter", message.filter);
 
-            var response = requester.request ("rtm.lists.getList");
+            var response = requester.request (message.method);
 
             while (response == null || response.stat != Rtm.Stat.OK) {
                 message.authenticator.reauthenticate();
@@ -41,8 +45,12 @@ class QueueProcessor : Object
 
                 requester.add_parameter ("api_key", "7dfc8cb9f7985d712e355ee4526d5c88");
                 requester.add_parameter ("auth_token", message.authenticator.token);
+                if (message.list_id != null)
+                    requester.add_parameter ("list_id", message.list_id.to_string ());
+                if (message.filter != null)
+                    requester.add_parameter ("filter", message.filter);
 
-                response = requester.request ("rtm.lists.getList");
+                response = requester.request (message.method);
             }
 
             _postbacks.push (new RtmPostback (message.callback, response));

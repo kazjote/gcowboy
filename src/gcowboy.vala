@@ -36,7 +36,7 @@ public class Main : Object
     /* ANJUTA: Widgets declaration for gcowboy.ui - DO NOT REMOVE */
 
 
-    public Main ()
+    public Main (RtmWrapper rtm)
     {
 
         try
@@ -48,16 +48,37 @@ public class Main : Object
             var window = builder.get_object ("window") as Window;
 
             var list_view = builder.get_object ("list_view") as TreeView;
-            list_store = new ListStore (1, typeof (string));
+            list_store = new ListStore (2, typeof (string), typeof (Rtm.TaskList));
             list_view.set_model (list_store);
 
             var task_view = builder.get_object ("task_view") as TreeView;
-            task_store = new ListStore (1, typeof (string));
+            task_store = new ListStore (3, typeof (string), typeof (Rtm.TaskSerie), typeof (Rtm.Task));
             task_view.set_model (task_store);
 
             var cell = new Gtk.CellRendererText ();
             list_view.insert_column_with_attributes (-1, "Lists", cell, "text", 0);
             task_view.insert_column_with_attributes (-1, "Tasks", cell, "text", 0);
+
+            list_view.row_activated.connect ((path, column) => {
+                TreeIter iter;
+                list_store.get_iter (out iter, path);
+                Value val;
+                list_store.get_value (iter, 1, out val);
+                Rtm.TaskList task_list = val.get_object () as Rtm.TaskList;
+
+                rtm.get_task_series (task_list.id, "", (response) => {
+                    task_store.clear ();
+
+                    response.task_series.foreach ((task_serie) => {
+                        task_serie.tasks.foreach ((task) => {
+                            TreeIter task_store_iter;
+
+                            task_store.append (out task_store_iter);
+                            task_store.set (task_store_iter, 0, task_serie.name, 1, task_serie, 2, task);
+                        });
+                    });
+                });
+            });
 
             infobar = builder.get_object ("infobar") as InfoBar;
             /* ANJUTA: Widgets initialization for gcowboy.ui - DO NOT REMOVE */
@@ -72,7 +93,7 @@ public class Main : Object
     }
 
     [CCode (instance_pos = -1)]
-    public void main_destroy (Widget window) 
+    public void main_on_destroy (Widget window)
     {
         Gtk.main_quit();
     }
@@ -80,12 +101,12 @@ public class Main : Object
     static int main (string[] args) 
     {
         Gtk.init (ref args);
-        var app = new Main ();
 
         var rtm_postbacks = new AsyncQueue<RtmPostback> ();
 
         var rtm = new RtmWrapper (rtm_postbacks);
 
+        var app = new Main (rtm);
 
         rtm.authorization.connect((t, url) => {
             app.infobar.add_button ("Authorize", 1);
@@ -114,7 +135,7 @@ public class Main : Object
             response.task_lists.foreach((task_list) => {
                 TreeIter iter;
                 app.list_store.append (out iter);
-                app.list_store.set (iter, 0, task_list.name);
+                app.list_store.set (iter, 0, task_list.name, 1, task_list);
             });
         });
 

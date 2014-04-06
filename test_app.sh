@@ -10,6 +10,8 @@ valac \
     rtm/frob.vala \
     rtm/token.vala \
     rtm/task_list.vala \
+    rtm/task_serie.vala \
+    rtm/task.vala \
     src/http_proxy_interface.vala \
     src/http_proxy.vala \
     src/gcowboy.vala \

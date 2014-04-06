@@ -6,6 +6,9 @@ class QueueMessage : Object
 
     public signal void completed ();
 
+    public int? list_id { get; set; }
+    public string? filter { get; set; }
+
     public Rtm.Authenticator authenticator
     {
         get { return _authenticator; }

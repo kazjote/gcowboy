@@ -5,11 +5,13 @@ public class RtmPostback : Object
     public delegate void Postback ();
 
     private Postback _postback;
+    private Rtm.Response _response;
 
     public Postback postback { get { return _postback; } }
 
     public RtmPostback (RtmResponseCallback callback, Rtm.Response response)
     {
+        _response = response; // take ownership
         _postback = () => { callback (response); };
     }
 }
@@ -48,11 +50,18 @@ public class RtmWrapper : Object
 
     public void get_lists (RtmResponseCallback callback)
     {
-        var message = new QueueMessage (authenticator, "getList", callback);
+        var message = new QueueMessage (authenticator, "rtm.lists.getList", callback);
         _queue.push(message);
     }
 
-    public void get_tasks
+    public void get_task_series (int? list_id = null, string? filter = null, RtmResponseCallback callback)
+    {
+        var message = new QueueMessage (authenticator, "rtm.tasks.getList", callback);
+        message.list_id = list_id;
+        message.filter = filter;
+
+        _queue.push(message);
+    }
 }
 
 // vim: ts=4 sw=4
