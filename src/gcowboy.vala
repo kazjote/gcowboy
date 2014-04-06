@@ -66,7 +66,7 @@ public class Main : Object
                 list_store.get_value (iter, 1, out val);
                 Rtm.TaskList task_list = val.get_object () as Rtm.TaskList;
 
-                rtm.get_task_series (task_list.id, "", (response) => {
+                rtm.get_task_series (task_list.id, "status:incomplete", (response) => {
                     task_store.clear ();
 
                     response.task_series.foreach ((task_serie) => {
