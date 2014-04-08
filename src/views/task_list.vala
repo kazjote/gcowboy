@@ -24,7 +24,7 @@ namespace Views
         public void remove ()
         {
             _tasks.foreach ((task) => {
-                _box.remove (task.box);
+                _box.remove (task.viewport);
                 _tasks.remove (task);
             });
         }
@@ -37,10 +37,10 @@ namespace Views
                 var new_task = new Task (task_model);
                 _tasks.append (new_task);
 
-                var task_box = new_task.box;
-                task_box.reparent (_box);
+                var viewport = new_task.viewport;
+                viewport.reparent (_box);
 
-                task_box.show ();
+                viewport.show ();
             });
         }
     }

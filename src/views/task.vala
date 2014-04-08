@@ -7,18 +7,18 @@ namespace Views
         const string UI_FILE = "src/views/task.ui";
 
         private Builder builder;
-        private Box _box;
+        private Viewport _viewport;
         private Label name_label;
 
-        public Box box { get { return _box; } }
+        public Viewport viewport { get { return _viewport; } }
 
         public Task (Models.Task task)
         {
             builder = new Builder ();
             builder.add_from_file (UI_FILE);
 
-            _box = builder.get_object ("Task") as Box;
             name_label = builder.get_object ("name") as Label;
+            _viewport = builder.get_object ("Task") as Viewport;
 
             name_label.label = task.name;
         }

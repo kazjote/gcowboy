@@ -1,0 +1,16 @@
+GtkViewport.task {
+    background-color: white;
+    background-image: -gtk-gradient (linear,
+               0 0, 0 1,
+               color-stop(0, #eeeeee),
+               color-stop(0.1, #fefefe),
+               color-stop(0.5, #ffffff),
+               color-stop(0.9, #fefefe),
+               color-stop(1, #eeeeee));
+}
+
+GtkViewport.task GtkLabel.name {
+    font-size: medium;
+    padding: 5px 0 5px 10px;
+}
+

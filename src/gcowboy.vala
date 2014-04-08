@@ -33,6 +33,7 @@ public class Main : Object
      */
     //const string UI_FILE = Config.PACKAGE_DATA_DIR + "/ui/" + "gcowboy.ui";
     const string UI_FILE = "src/gcowboy.ui";
+	const string CSS_FILE = "src/gcowboy.css";
 
     /* ANJUTA: Widgets declaration for gcowboy.ui - DO NOT REMOVE */
 
@@ -47,6 +48,13 @@ public class Main : Object
             builder.connect_signals (this);
 
             var window = builder.get_object ("window") as Window;
+
+            var screen = Gdk.Screen.get_default ();
+            var css_provider = new CssProvider(); 
+            css_provider.load_from_file (File.new_for_path (CSS_FILE));
+
+            var style_context = window.get_style_context ();
+            style_context.add_provider_for_screen (screen, css_provider, STYLE_PROVIDER_PRIORITY_APPLICATION);
 
             var list_view = builder.get_object ("list_view") as TreeView;
             list_store = new ListStore (2, typeof (string), typeof (Rtm.TaskList));
