@@ -19,6 +19,10 @@ valac \
     src/queue_message.vala \
     src/queue_processor.vala \
     src/rtm_wrapper.vala \
+    src/views/task.vala \
+    src/views/task_list.vala \
+    src/models/task.vala \
+    src/models/task_repository.vala \
     --Xcc=-w \
     --thread \
     -g \

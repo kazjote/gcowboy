@@ -17,6 +17,7 @@ namespace Rtm
             _list_id = list_id;
             _name = element->get_prop ("name");
             _id = int.parse (element->get_prop ("id"));
+            _tasks = new List<Task> ();
 
             for (Xml.Node* iter = element->children; iter != null; iter = iter->next) {
                 if (iter->name != "task") continue;

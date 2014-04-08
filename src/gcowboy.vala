@@ -24,8 +24,8 @@ public class Main : Object
 
     private InfoBar infobar;
     private ListStore list_store;
-    private ListStore task_store;
-    private TreeModelSort task_store_sort;
+    private Models.TaskRepository task_repository;
+    private Views.TaskList task_list;
 
     /* 
      * Uncomment this line when you are done testing and building a tarball
@@ -52,56 +52,23 @@ public class Main : Object
             list_store = new ListStore (2, typeof (string), typeof (Rtm.TaskList));
             list_view.set_model (list_store);
 
-            var task_view = builder.get_object ("task_view") as TreeView;
-            task_store = new ListStore (3, typeof (string), typeof (Rtm.TaskSerie), typeof (Rtm.Task));
-
             var cell = new Gtk.CellRendererText ();
             list_view.insert_column_with_attributes (-1, "Lists", cell, "text", 0);
-            task_view.insert_column_with_attributes (-1, "Tasks", cell, "text", 0);
 
-            task_store_sort = new TreeModelSort.with_model (task_store);
-            task_store_sort.set_sort_column_id (0, SortType.ASCENDING);
-            task_store_sort.set_sort_func (0, (model, iter_a, iter_b) => {
-                Value name_val_a, name_val_b;
-                model.get_value(iter_a, 0, out name_val_a);
-                model.get_value(iter_b, 0, out name_val_b);
-
-                if ((string) name_val_a == null) return -1;
-                if ((string) name_val_b == null) return 1;
-
-                var name_a = ((string) name_val_a).up ();
-                var name_b = ((string) name_val_b).up ();
-
-                if (name_a > name_b) {
-                    return 1;
-                } else if (name_a == name_b) {
-                    return 0;
-                } else {
-                    return -1;
-                }
-            });
-
-            task_view.set_model (task_store_sort);
+            var task_box = builder.get_object ("task_box") as Box;
+            task_repository = new Models.TaskRepository (rtm);
 
             list_view.row_activated.connect ((path, column) => {
                 TreeIter iter;
                 list_store.get_iter (out iter, path);
                 Value val;
                 list_store.get_value (iter, 1, out val);
-                Rtm.TaskList task_list = val.get_object () as Rtm.TaskList;
+                Rtm.TaskList rtm_task_list = val.get_object () as Rtm.TaskList;
 
-                rtm.get_task_series (task_list.id, "status:incomplete", (response) => {
-                    task_store.clear ();
-
-                    response.task_series.foreach ((task_serie) => {
-                        task_serie.tasks.foreach ((task) => {
-                            TreeIter task_store_iter;
-
-                            task_store.append (out task_store_iter);
-                            task_store.set (task_store_iter, 0, task_serie.name, 1, task_serie, 2, task);
-                        });
-                    });
-                });
+                task_list.remove ();
+                task_list = new Views.TaskList (rtm_task_list.id, task_repository, task_box);
+                task_list.draw ();
+                task_repository.fetch_task_list (rtm_task_list.id);
             });
 
             infobar = builder.get_object ("infobar") as InfoBar;

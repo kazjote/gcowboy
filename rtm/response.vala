@@ -27,6 +27,8 @@ namespace Rtm
         public Response (string body)
         {
             response_body = body;
+            _task_series = new List<TaskSerie> ();
+            _task_lists = new List<TaskList> ();
         }
 
         public bool process ()
