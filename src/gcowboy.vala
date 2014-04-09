@@ -49,6 +49,8 @@ public class Main : Object
 
             var window = builder.get_object ("window") as Window;
 
+            window.set_events (Gdk.EventType.ENTER_NOTIFY);
+
             var screen = Gdk.Screen.get_default ();
             var css_provider = new CssProvider(); 
             css_provider.load_from_file (File.new_for_path (CSS_FILE));

@@ -1,4 +1,5 @@
 GtkViewport.task {
+    transition: 100ms ease-in-out;
     background-color: white;
     background-image: -gtk-gradient (linear,
                0 0, 0 1,
@@ -7,6 +8,17 @@ GtkViewport.task {
                color-stop(0.5, #ffffff),
                color-stop(0.9, #fefefe),
                color-stop(1, #eeeeee));
+}
+
+GtkViewport.task.hovered {
+    background-color: white;
+    background-image: -gtk-gradient (linear,
+               0 0, 0 1,
+               color-stop(0, #111111),
+               color-stop(0.1, #fefefe),
+               color-stop(0.5, #ffffff),
+               color-stop(0.9, #fefefe),
+               color-stop(1, #111111));
 }
 
 GtkViewport.task GtkLabel.name {

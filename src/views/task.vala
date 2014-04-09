@@ -7,10 +7,11 @@ namespace Views
         const string UI_FILE = "src/views/task.ui";
 
         private Builder builder;
+        private EventBox _box;
         private Viewport _viewport;
         private Label name_label;
 
-        public Viewport viewport { get { return _viewport; } }
+        public EventBox box { get { return _box; } }
 
         public Task (Models.Task task)
         {
@@ -18,7 +19,18 @@ namespace Views
             builder.add_from_file (UI_FILE);
 
             name_label = builder.get_object ("name") as Label;
-            _viewport = builder.get_object ("Task") as Viewport;
+            _box = builder.get_object ("Task") as EventBox;
+            _viewport = builder.get_object ("TaskViewport") as Viewport;
+
+            _box.enter_notify_event.connect((widget, event) => {
+                _viewport.get_style_context ().add_class ("hovered");
+                return true;
+            });
+
+            _box.leave_notify_event.connect((widget, event) => {
+                _viewport.get_style_context ().remove_class ("hovered");
+                return true;
+            });
 
             name_label.label = task.name;
         }
