@@ -6,11 +6,15 @@ namespace Models
         private int _list_id;
         private int _serie_id;
         private string _name;
+        private string _created;
+        private string _url;
 
         public int id { get { return _id; } }
         public int list_id { get { return _list_id; } }
         public int serie_id { get { return _serie_id; } }
         public string name { get { return _name; } }
+        public string created { get { return _created; } }
+        public string url { get { return _url; } }
 
         public Task (Rtm.TaskSerie task_serie, Rtm.Task task)
         {
@@ -23,6 +27,8 @@ namespace Models
             _list_id = task_serie.list_id;
             _serie_id = task_serie.id;
             _name = task_serie.name;
+            _created = task_serie.created;
+            _url = task_serie.url;
         }
     }
 }

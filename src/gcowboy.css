@@ -1,24 +1,24 @@
 GtkViewport.task {
-    transition: 100ms ease-in-out;
+    transition: 500ms ease-in-out;
     background-color: white;
-    background-image: -gtk-gradient (linear,
-               0 0, 0 1,
-               color-stop(0, #eeeeee),
-               color-stop(0.1, #fefefe),
-               color-stop(0.5, #ffffff),
-               color-stop(0.9, #fefefe),
-               color-stop(1, #eeeeee));
+    border-width: 1px;
+    border-color: #eeeeee;
+    border-style: solid;
 }
 
 GtkViewport.task.hovered {
     background-color: white;
-    background-image: -gtk-gradient (linear,
-               0 0, 0 1,
-               color-stop(0, #111111),
-               color-stop(0.1, #fefefe),
-               color-stop(0.5, #ffffff),
-               color-stop(0.9, #fefefe),
-               color-stop(1, #111111));
+    border-color: #aaaaaa;
+}
+
+GtkLabel.name {
+    border-width: 0 0 1px 0;
+    border-color: #eeeeee;
+    border-style: solid;
+}
+
+GtkLabel.caption {
+    padding: 5px 5px 5px 20px;
 }
 
 GtkViewport.task GtkLabel.name {
