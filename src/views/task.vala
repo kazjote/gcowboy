@@ -30,6 +30,21 @@ namespace Views
             _time_label = builder.get_object ("Time") as Label;
             _arrow = builder.get_object ("Arrow") as Arrow;
 
+            switch (task.priority) {
+                case Models.Priority.HIGHEST:
+                    _viewport.get_style_context ().add_class ("priority-highest");
+                    break;
+                case Models.Priority.MEDIUM:
+                    _viewport.get_style_context ().add_class ("priority-medium");
+                    break;
+                case Models.Priority.LOWEST:
+                    _viewport.get_style_context ().add_class ("priority-lowest");
+                    break;
+                default:
+                    _viewport.get_style_context ().add_class ("priority-unknown");
+                    break;
+            }
+
             _box.enter_notify_event.connect ((widget, event) => {
                 _viewport.get_style_context ().add_class ("hovered");
                 return true;

@@ -1,20 +1,39 @@
 GtkViewport.task {
     transition: 500ms ease-in-out;
     background-color: white;
-    border-width: 1px;
+    border-width: 2px;
     border-color: #eeeeee;
     border-style: solid;
 }
 
 GtkViewport.task.hovered {
-    background-color: white;
-    border-color: #aaaaaa;
+    border-color: #999999;
 }
 
 GtkLabel.name {
     border-width: 0 0 1px 0;
     border-color: #eeeeee;
     border-style: solid;
+}
+
+GtkViewport.task GtkLabel.priority {
+    padding: 0 5px 0 5px;
+}
+
+GtkViewport.task.priority-highest GtkLabel.priority {
+    background-color: #EA5200;
+}
+
+GtkViewport.task.priority-medium GtkLabel.priority {
+    background-color: #0060BF;
+}
+
+GtkViewport.task.priority-lowest GtkLabel.priority {
+    background-color: #359AFF;
+}
+
+GtkViewport.task.priority-unknown GtkLabel.priority {
+    background-color: #cccccc;
 }
 
 GtkLabel.caption {

@@ -1,5 +1,12 @@
 namespace Models
 {
+    enum Priority {
+        HIGHEST,
+        MEDIUM,
+        LOWEST,
+        UNKNOWN
+    }
+
     class Task : Object
     {
         private int _id;
@@ -8,6 +15,7 @@ namespace Models
         private string _name;
         private string _created;
         private string _url;
+        private Priority _priority;
 
         public int id { get { return _id; } }
         public int list_id { get { return _list_id; } }
@@ -15,6 +23,7 @@ namespace Models
         public string name { get { return _name; } }
         public string created { get { return _created; } }
         public string url { get { return _url; } }
+        public Priority priority { get { return _priority; } }
 
         public Task (Rtm.TaskSerie task_serie, Rtm.Task task)
         {
@@ -29,6 +38,20 @@ namespace Models
             _name = task_serie.name;
             _created = task_serie.created;
             _url = task_serie.url;
+            switch (task.priority) {
+                case "1":
+                    _priority = Priority.HIGHEST;
+                    break;
+                case "2":
+                    _priority = Priority.MEDIUM;
+                    break;
+                case "3":
+                    _priority = Priority.LOWEST;
+                    break;
+                default:
+                    _priority = Priority.UNKNOWN;
+                    break;
+            }
         }
     }
 }
