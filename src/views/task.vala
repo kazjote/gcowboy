@@ -20,7 +20,11 @@ namespace Views
         public Task (Models.Task task)
         {
             builder = new Builder ();
-            builder.add_from_file (UI_FILE);
+            try {
+                builder.add_from_file (UI_FILE);
+            } catch (GLib.Error e) {
+                stderr.printf ("Could not load UI: %s\n", e.message);
+            }
 
             name_label = builder.get_object ("name") as Label;
             _box = builder.get_object ("Task") as EventBox;

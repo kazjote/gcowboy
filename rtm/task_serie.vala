@@ -8,7 +8,6 @@ namespace Rtm
         private string _name;
         private string _created;
         private string _url;
-        private string _priority;
 
         public int list_id { get { return _list_id; } }
         public int id { get { return _id; } }
