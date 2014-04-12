@@ -72,11 +72,20 @@ namespace Views
             if (task.url == "") {
                 _url_label.hide ();
             } else {
-                _url_label.label = _url_label.uri = task.url;
+                _url_label.label = shorten (task.url, 25);
+                _url_label.uri = task.url;
             }
             _time_label.label = task.created;
 
-            name_label.label = task.name;
+            name_label.label = shorten (task.name, 40);
+        }
+
+        private string shorten (string caption, int max_length) {
+            if (caption.length > max_length) {
+                return caption.substring(0, max_length - 3) + "...";
+            } else {
+                return caption;
+            }
         }
     }
 }

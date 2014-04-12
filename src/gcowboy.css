@@ -1,3 +1,7 @@
+GtkLabel.new_task {
+    padding: 15px 10px 15px 10px;
+}
+
 GtkViewport.task {
     transition: 500ms ease-in-out;
     background-color: white;
