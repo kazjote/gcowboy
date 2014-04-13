@@ -27,6 +27,8 @@ public class Main : Object
     private Models.TaskRepository task_repository;
     private Views.TaskList task_list;
 
+    public MainLoop loop; // TODO: Refactor
+
     /* 
      * Uncomment this line when you are done testing and building a tarball
      * or installing
@@ -45,18 +47,20 @@ public class Main : Object
         {
             var builder = new Builder ();
             builder.add_from_file (UI_FILE);
-            builder.connect_signals (this);
 
             var window = builder.get_object ("window") as Window;
 
             window.set_events (Gdk.EventType.ENTER_NOTIFY);
+            window.destroy.connect(() => {
+                loop.quit ();
+                Gtk.main_quit();
+            });
 
             var screen = Gdk.Screen.get_default ();
             var css_provider = new CssProvider(); 
             css_provider.load_from_file (File.new_for_path (CSS_FILE));
 
-            var style_context = window.get_style_context ();
-            style_context.add_provider_for_screen (screen, css_provider, STYLE_PROVIDER_PRIORITY_APPLICATION);
+            Gtk.StyleContext.add_provider_for_screen (screen, css_provider, STYLE_PROVIDER_PRIORITY_APPLICATION);
 
             var list_view = builder.get_object ("list_view") as TreeView;
             list_store = new ListStore (2, typeof (string), typeof (Rtm.TaskList));
@@ -91,12 +95,6 @@ public class Main : Object
             stderr.printf ("Could not load UI: %s\n", e.message);
         } 
 
-    }
-
-    [CCode (instance_pos = -1)]
-    public void main_on_destroy (Widget window)
-    {
-        Gtk.main_quit();
     }
 
     static int main (string[] args) 
@@ -160,7 +158,7 @@ public class Main : Object
         });
 
         rtm.get_lists ((response) => {
-            // app.list_store.clear ();
+            app.list_store.clear ();
 
             response.task_lists.foreach((task_list) => {
                 TreeIter iter;
@@ -169,7 +167,7 @@ public class Main : Object
             });
         });
 
-        MainLoop loop = new MainLoop ();
+        app.loop = new MainLoop ();
         TimeoutSource time = new TimeoutSource (200);
 
         time.set_callback (() => {
@@ -181,9 +179,9 @@ public class Main : Object
             return true;
         });
 
-        time.attach (loop.get_context ());
+        time.attach (app.loop.get_context ());
 
-        loop.run ();
+        app.loop.run ();
 
         return 0;
     }
