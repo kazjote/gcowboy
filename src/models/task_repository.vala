@@ -23,10 +23,6 @@ namespace Models
                     sorted_list.append(task);
             });
 
-            sorted_list.sort_with_data ((a, b) => {
-                return strcmp(a.name, b.name);
-            });
-
             return (owned) sorted_list;
         }
 
@@ -54,7 +50,13 @@ namespace Models
                     if (found_task != null) {
                         found_task.update_with (rtm_task_serie, rtm_task);
                     } else {
-                        _tasks.append (new Task (rtm_task_serie, rtm_task));
+                        _tasks.insert_sorted (new Task (rtm_task_serie, rtm_task), (a, b) => {
+                            if (a.priority == b.priority) {
+                                return strcmp(a.name.up (), b.name.up ());
+                            }
+
+                            return (int) (a.priority > b.priority) - (int) (a.priority < b.priority);
+                        });
                     }
                 });
             });
