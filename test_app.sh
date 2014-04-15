@@ -10,6 +10,7 @@ valac \
     rtm/response.vala \
     rtm/frob.vala \
     rtm/token.vala \
+    rtm/timeline.vala \
     rtm/task_list.vala \
     rtm/task_serie.vala \
     rtm/task.vala \
@@ -21,6 +22,8 @@ valac \
     src/rtm_wrapper.vala \
     src/views/task.vala \
     src/views/task_list.vala \
+    src/views/notification_area.vala \
+    src/views/new_task.vala \
     src/models/task.vala \
     src/models/task_repository.vala \
     --Xcc=-w \

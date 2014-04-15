@@ -6,6 +6,7 @@ namespace Models
         private RtmWrapper _rtm;
 
         public signal void tasks_updated ();
+        public signal void finished_adding ();
 
         public TaskRepository (RtmWrapper rtm)
         {
@@ -56,6 +57,15 @@ namespace Models
                         _tasks.append (new Task (rtm_task_serie, rtm_task));
                     }
                 });
+            });
+        }
+
+        public void add_task (string name)
+        {
+            _rtm.add_task (name, (response) => {
+                update_tasks (response.task_series);
+
+                finished_adding();
             });
         }
     }

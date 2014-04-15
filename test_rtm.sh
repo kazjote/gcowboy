@@ -11,6 +11,7 @@ valac \
     rtm/response.vala \
     rtm/frob.vala \
     rtm/token.vala \
+    rtm/timeline.vala \
     rtm/task_list.vala \
     rtm/task_serie.vala \
     rtm/task.vala \

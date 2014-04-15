@@ -23,6 +23,7 @@ namespace Rtm
         public Frob frob { get { return _frob; } }
         public List<TaskList> task_lists { get { return _task_lists; } }
         public List<TaskSerie> task_series { get { return _task_series; } }
+        public Timeline timeline { get; set; }
 
         public Response (string body)
         {
@@ -62,6 +63,9 @@ namespace Rtm
             switch (element->name) {
                 case "frob":
                     this._frob = new Frob (element);
+                    break;
+                case "timeline":
+                    this.timeline = new Timeline (element);
                     break;
                 case "auth":
                     this._token = new Token (element);

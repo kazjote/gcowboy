@@ -2,6 +2,7 @@
 <interface>
   <!-- interface-requires gtk+ 3.0 -->
   <object class="GtkWindow" id="window">
+    <property name="width_request">500</property>
     <property name="visible">True</property>
     <property name="can_focus">False</property>
     <property name="title" translatable="yes">GCowboy</property>
@@ -27,6 +28,18 @@
           </packing>
         </child>
         <child>
+          <object class="GtkInfoBar" id="NotificationBar">
+            <property name="app_paintable">True</property>
+            <property name="can_focus">False</property>
+            <property name="orientation">vertical</property>
+          </object>
+          <packing>
+            <property name="expand">False</property>
+            <property name="fill">True</property>
+            <property name="position">1</property>
+          </packing>
+        </child>
+        <child>
           <object class="GtkBox" id="box2">
             <property name="visible">True</property>
             <property name="can_focus">False</property>
@@ -34,7 +47,7 @@
               <object class="GtkLabel" id="label1">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
-                <property name="label" translatable="yes">New:</property>
+                <property name="label" translatable="yes">New task:</property>
                 <style>
                   <class name="new_task"/>
                 </style>
@@ -49,6 +62,7 @@
               <object class="GtkEntry" id="NewTaskEntry">
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
+                <property name="margin_right">10</property>
                 <property name="hexpand">True</property>
                 <property name="invisible_char">●</property>
                 <property name="activates_default">True</property>
@@ -64,29 +78,11 @@
                 <property name="position">1</property>
               </packing>
             </child>
-            <child>
-              <object class="GtkButton" id="AddTaskButton">
-                <property name="label">gtk-apply</property>
-                <property name="visible">True</property>
-                <property name="can_focus">False</property>
-                <property name="receives_default">True</property>
-                <property name="valign">center</property>
-                <property name="margin_right">10</property>
-                <property name="use_stock">True</property>
-                <property name="image_position">right</property>
-                <property name="always_show_image">True</property>
-              </object>
-              <packing>
-                <property name="expand">False</property>
-                <property name="fill">True</property>
-                <property name="position">2</property>
-              </packing>
-            </child>
           </object>
           <packing>
             <property name="expand">False</property>
             <property name="fill">True</property>
-            <property name="position">1</property>
+            <property name="position">2</property>
           </packing>
         </child>
         <child>
@@ -152,7 +148,7 @@
           <packing>
             <property name="expand">False</property>
             <property name="fill">True</property>
-            <property name="position">2</property>
+            <property name="position">3</property>
           </packing>
         </child>
         <child>

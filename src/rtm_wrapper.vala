@@ -21,6 +21,8 @@ public class RtmWrapper : Object
     private Rtm.Authenticator authenticator;
     private AsyncQueue<QueueMessage> _queue;
     private QueueProcessor _queue_processor;
+    private string new_task_name; // FIXME: hack to keep the reference :/ 
+    private RtmResponseCallback new_task_callback; // FIXME: hack to keep the reference :/ 
 
     public signal void authorization (string url);
     public signal void authenticated (string token);
@@ -66,6 +68,23 @@ public class RtmWrapper : Object
         message.filter = filter;
 
         _queue.push(message);
+    }
+
+    public void add_task (string task_name, RtmResponseCallback callback)
+    {
+        new_task_name = task_name;
+        new_task_callback = callback;
+
+        var timeline_message = new QueueMessage(authenticator, "rtm.timelines.create", (response) => {
+            var message = new QueueMessage (authenticator, "rtm.tasks.add", new_task_callback);
+            message.name = new_task_name;
+            message.parse = true;
+            message.timeline = response.timeline.timeline;
+
+            _queue.push(message);
+        });
+
+        _queue.push(timeline_message);
     }
 }
 

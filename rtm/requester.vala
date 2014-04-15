@@ -75,7 +75,7 @@ namespace Rtm
 
             var query = "";
             parameters.foreach ((parameter) => {
-                query += parameter.key + "=" + parameter.val + "&";
+                query += parameter.key + "=" + Uri.escape_string (parameter.val) + "&";
             });
 
             query += "api_sig=" + signature;

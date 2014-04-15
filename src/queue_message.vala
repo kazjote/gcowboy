@@ -8,6 +8,9 @@ class QueueMessage : Object
 
     public int? list_id { get; set; }
     public string? filter { get; set; }
+    public string? name { get; set; }
+    public bool parse { get; set; default = false; }
+    public string? timeline { get; set; }
 
     public Rtm.Authenticator authenticator
     {

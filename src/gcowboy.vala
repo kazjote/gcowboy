@@ -26,6 +26,8 @@ public class Main : Object
     private ListStore list_store;
     private Models.TaskRepository task_repository;
     private Views.TaskList task_list;
+    private Views.NotificationArea notification_area;
+    private Views.NewTask new_task;
 
     public MainLoop loop; // TODO: Refactor
 
@@ -86,8 +88,15 @@ public class Main : Object
             });
 
             infobar = builder.get_object ("infobar") as InfoBar;
+
+            var notification_bar = builder.get_object ("NotificationBar") as InfoBar;
+            notification_area = new Views.NotificationArea (notification_bar);
+
+            var new_task_entry = builder.get_object ("NewTaskEntry") as Entry;
+            new_task = new Views.NewTask (new_task_entry, task_repository, notification_area);
+
             /* ANJUTA: Widgets initialization for gcowboy.ui - DO NOT REMOVE */
-            window.show_all ();
+            window.show ();
 
             infobar.hide ();
         } 

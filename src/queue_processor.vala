@@ -31,10 +31,7 @@ class QueueProcessor : Object
 
             requester.add_parameter ("api_key", "7dfc8cb9f7985d712e355ee4526d5c88");
             requester.add_parameter ("auth_token", message.authenticator.token);
-            if (message.list_id != null)
-                requester.add_parameter ("list_id", message.list_id.to_string ());
-            if (message.filter != null)
-                requester.add_parameter ("filter", message.filter);
+            apply_params (requester, message);
 
             var response = requester.request (message.method);
 
@@ -45,10 +42,7 @@ class QueueProcessor : Object
 
                 requester.add_parameter ("api_key", "7dfc8cb9f7985d712e355ee4526d5c88");
                 requester.add_parameter ("auth_token", message.authenticator.token);
-                if (message.list_id != null)
-                    requester.add_parameter ("list_id", message.list_id.to_string ());
-                if (message.filter != null)
-                    requester.add_parameter ("filter", message.filter);
+                apply_params (requester, message);
 
                 response = requester.request (message.method);
             }
@@ -57,6 +51,20 @@ class QueueProcessor : Object
         }
 
         return null;
+    }
+
+    private void apply_params (Rtm.Requester requester, QueueMessage message)
+    {
+        if (message.list_id != null)
+            requester.add_parameter ("list_id", message.list_id.to_string ());
+        if (message.filter != null)
+            requester.add_parameter ("filter", message.filter);
+        if (message.name != null)
+            requester.add_parameter ("name", message.name);
+        if (message.timeline != null)
+            requester.add_parameter ("timeline", message.timeline);
+        if (message.parse)
+            requester.add_parameter ("parse", "1");
     }
 }
 
