@@ -73,7 +73,7 @@ public class RtmWrapper : Object
     public void add_task (string task_name, RtmResponseCallback callback)
     {
         new_task_name = task_name;
-        new_task_callback = callback;
+        new_task_callback = (response) => { callback (response); };
 
         var timeline_message = new QueueMessage(authenticator, "rtm.timelines.create", (response) => {
             var message = new QueueMessage (authenticator, "rtm.tasks.add", new_task_callback);
