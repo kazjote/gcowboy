@@ -1,8 +1,8 @@
-class QueueMessage : Object
+public class QueueMessage : Object
 {
     private Rtm.Authenticator _authenticator;
     private string _method;
-    private RtmResponseCallback _callback;
+    private MessageProcessedCallback _callback;
 
     public signal void completed ();
 
@@ -11,6 +11,8 @@ class QueueMessage : Object
     public string? name { get; set; }
     public bool parse { get; set; default = false; }
     public string? timeline { get; set; }
+    public Rtm.Response? rtm_response { get; set; }
+    public QueueMessage? followup { get; set; }
 
     public Rtm.Authenticator authenticator
     {
@@ -22,16 +24,16 @@ class QueueMessage : Object
         get { return _method; }
     }
 
-    public RtmResponseCallback callback
+    public MessageProcessedCallback callback
     {
         get { return _callback; }
     }
 
-    public QueueMessage (Rtm.Authenticator auth, string method, RtmResponseCallback cb)
+    public QueueMessage (Rtm.Authenticator auth, string method, MessageProcessedCallback cb)
     {
         this._authenticator = auth;
         this._method = method;
-        this._callback = (response) => { cb (response); };
+        this._callback = (message) => { cb (message); };
     }
 }
 

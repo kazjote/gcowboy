@@ -110,16 +110,15 @@ public class Main : Object
     {
         Gtk.init (ref args);
 
-        var rtm_postbacks = new AsyncQueue<RtmPostback> ();
+        var response_queue = new AsyncQueue<QueueMessage> ();
 
-        var rtm = new RtmWrapper (rtm_postbacks);
+        var rtm = new RtmWrapper (response_queue);
 
         var token_file_path = Environment.get_home_dir () + "/.gcowboy_token";
 
         try {
 
             var file = File.new_for_path (token_file_path);
-
 
             if (file.query_exists ()) {
                 var dis = new DataInputStream (file.read ());
@@ -166,10 +165,10 @@ public class Main : Object
 
         });
 
-        rtm.get_lists ((response) => {
+        rtm.get_lists ((message) => {
             app.list_store.clear ();
 
-            response.task_lists.foreach((task_list) => {
+            message.rtm_response.task_lists.foreach((task_list) => {
                 TreeIter iter;
                 app.list_store.append (out iter);
                 app.list_store.set (iter, 0, task_list.name, 1, task_list);
@@ -180,10 +179,10 @@ public class Main : Object
         TimeoutSource time = new TimeoutSource (200);
 
         time.set_callback (() => {
-            var postback = rtm_postbacks.try_pop ();
+            var queue_message = response_queue.try_pop ();
 
-            if (postback != null) {
-                postback.postback ();
+            if (queue_message != null) {
+                queue_message.callback (queue_message);
             }
             return true;
         });

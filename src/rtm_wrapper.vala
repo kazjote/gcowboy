@@ -1,33 +1,15 @@
-public delegate void RtmResponseCallback (Rtm.Response response);
-
-public class RtmPostback : Object
-{
-    public delegate void Postback ();
-
-    private Postback _postback;
-    private Rtm.Response _response;
-
-    public Postback postback { get { return _postback; } }
-
-    public RtmPostback (RtmResponseCallback callback, Rtm.Response response)
-    {
-        _response = response; // take ownership
-        _postback = () => { callback (response); };
-    }
-}
+public delegate void MessageProcessedCallback (QueueMessage message);
 
 public class RtmWrapper : Object
 {
     private Rtm.Authenticator authenticator;
-    private AsyncQueue<QueueMessage> _queue;
+    private AsyncQueue<QueueMessage> _request_queue;
     private QueueProcessor _queue_processor;
-    private string new_task_name; // FIXME: hack to keep the reference :/ 
-    private RtmResponseCallback new_task_callback; // FIXME: hack to keep the reference :/ 
 
     public signal void authorization (string url);
     public signal void authenticated (string token);
 
-    public RtmWrapper (AsyncQueue<RtmPostback> postbacks)
+    public RtmWrapper (AsyncQueue<QueueMessage> response_queue)
     {
         this.authenticator = new Rtm.Authenticator (new HttpProxy (), "5792b9b6adbc3847", "7dfc8cb9f7985d712e355ee4526d5c88");
 
@@ -39,8 +21,8 @@ public class RtmWrapper : Object
             authenticated (token);
         });
 
-        this._queue = new AsyncQueue<QueueMessage> ();
-        this._queue_processor = new QueueProcessor (_queue, postbacks);
+        this._request_queue = new AsyncQueue<QueueMessage> ();
+        this._queue_processor = new QueueProcessor (_request_queue, response_queue);
         this._queue_processor.run ();
     }
 
@@ -49,42 +31,44 @@ public class RtmWrapper : Object
         authenticator.token = token;
     }
 
-    public void authenticate (RtmResponseCallback callback)
+    public void authenticate (MessageProcessedCallback callback)
     {
         var message = new QueueMessage (authenticator, "authenticate", callback);
-        _queue.push (message);
+        _request_queue.push (message);
     }
 
-    public void get_lists (RtmResponseCallback callback)
+    public void get_lists (MessageProcessedCallback callback)
     {
         var message = new QueueMessage (authenticator, "rtm.lists.getList", callback);
-        _queue.push(message);
+        _request_queue.push(message);
     }
 
-    public void get_task_series (int? list_id = null, string? filter = null, RtmResponseCallback callback)
+    public void get_task_series (int? list_id = null, string? filter = null, MessageProcessedCallback callback)
     {
         var message = new QueueMessage (authenticator, "rtm.tasks.getList", callback);
         message.list_id = list_id;
         message.filter = filter;
 
-        _queue.push(message);
+        _request_queue.push(message);
     }
 
-    public void add_task (string task_name, RtmResponseCallback callback)
+    public void add_task (string task_name, MessageProcessedCallback callback)
     {
-        new_task_name = task_name;
-        new_task_callback = (response) => { callback (response); };
+        var message = new QueueMessage (authenticator, "rtm.tasks.add", callback);
 
-        var timeline_message = new QueueMessage(authenticator, "rtm.timelines.create", (response) => {
-            var message = new QueueMessage (authenticator, "rtm.tasks.add", new_task_callback);
-            message.name = new_task_name;
-            message.parse = true;
-            message.timeline = response.timeline.timeline;
+        message.name = task_name;
+        message.parse = true;
 
-            _queue.push(message);
+        var timeline_message = new QueueMessage(authenticator, "rtm.timelines.create", (_timeline_message) => {
+            var _message = _timeline_message.followup;
+
+            _message.timeline = _timeline_message.rtm_response.timeline.timeline;
+            _request_queue.push(_message);
         });
 
-        _queue.push(timeline_message);
+        timeline_message.followup = message;
+
+        _request_queue.push(timeline_message);
     }
 }
 

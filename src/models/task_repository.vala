@@ -28,8 +28,8 @@ namespace Models
 
         public void fetch_task_list (int list_id)
         {
-            _rtm.get_task_series (list_id, "status:incomplete", (response) => {
-                update_tasks (response.task_series);
+            _rtm.get_task_series (list_id, "status:incomplete", (message) => {
+                update_tasks (message.rtm_response.task_series);
 
                 tasks_updated ();
             });
@@ -64,8 +64,8 @@ namespace Models
 
         public void add_task (string name)
         {
-            _rtm.add_task (name, (response) => {
-                update_tasks (response.task_series);
+            _rtm.add_task (name, (message) => {
+                update_tasks (message.rtm_response.task_series);
 
                 finished_adding();
             });

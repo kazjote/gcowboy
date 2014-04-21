@@ -1,12 +1,12 @@
 class QueueProcessor : Object
 {
-    private AsyncQueue<QueueMessage> _queue;
-    private AsyncQueue<RtmPostback> _postbacks;
+    private AsyncQueue<QueueMessage> _request_queue;
+    private AsyncQueue<QueueMessage> _response_queue;
 
-    public QueueProcessor (AsyncQueue<QueueMessage> queue, AsyncQueue<RtmPostback> postbacks)
+    public QueueProcessor (AsyncQueue<QueueMessage> request_queue, AsyncQueue<QueueMessage> response_queue)
     {
-        this._postbacks = postbacks;
-        this._queue = queue;
+        this._response_queue = response_queue;
+        this._request_queue = request_queue;
     }
 
     public void run ()
@@ -23,7 +23,7 @@ class QueueProcessor : Object
     {
         QueueMessage message = null;
 
-        while ((message = _queue.pop ()) != null)
+        while ((message = _request_queue.pop ()) != null)
         {
             message.authenticator.authenticate ();
 
@@ -41,7 +41,8 @@ class QueueProcessor : Object
                 response = requester.request (message.method);
             }
 
-            _postbacks.push (new RtmPostback (message.callback, response));
+            message.rtm_response = response;
+            _response_queue.push (message);
         }
 
         return null;
