@@ -28,9 +28,6 @@ class QueueProcessor : Object
             message.authenticator.authenticate ();
 
             var requester = new Rtm.Requester(new HttpProxy (), "5792b9b6adbc3847");
-
-            requester.add_parameter ("api_key", "7dfc8cb9f7985d712e355ee4526d5c88");
-            requester.add_parameter ("auth_token", message.authenticator.token);
             apply_params (requester, message);
 
             var response = requester.request (message.method);
@@ -39,9 +36,6 @@ class QueueProcessor : Object
                 message.authenticator.reauthenticate();
 
                 requester = new Rtm.Requester(new HttpProxy (), "5792b9b6adbc3847");
-
-                requester.add_parameter ("api_key", "7dfc8cb9f7985d712e355ee4526d5c88");
-                requester.add_parameter ("auth_token", message.authenticator.token);
                 apply_params (requester, message);
 
                 response = requester.request (message.method);
@@ -55,6 +49,9 @@ class QueueProcessor : Object
 
     private void apply_params (Rtm.Requester requester, QueueMessage message)
     {
+        requester.add_parameter ("api_key", "7dfc8cb9f7985d712e355ee4526d5c88");
+        requester.add_parameter ("auth_token", message.authenticator.token);
+
         if (message.list_id != null)
             requester.add_parameter ("list_id", message.list_id.to_string ());
         if (message.filter != null)
