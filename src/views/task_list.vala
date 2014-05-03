@@ -35,6 +35,11 @@ namespace Views
 
             _task_repository.get_task_list (_list_id).foreach ((task_model) => {
                 var new_task = new Task (task_model);
+
+                new_task.complete_requested.connect (() => {
+                    _task_repository.complete_task (task_model);
+                });
+
                 _tasks.append (new_task);
 
                 var task_box = new_task.box;

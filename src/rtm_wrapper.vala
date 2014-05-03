@@ -70,6 +70,14 @@ public class RtmWrapper : Object
 
         _request_queue.push(timeline_message);
     }
+
+    public void complete_task (int list_id, int serie_id, int task_id, MessageProcessedCallback callback)
+    {
+        var message = new QueueMessage (authenticator, "rtm.tasks.complete", callback);
+        message.list_id = list_id;
+        message.serie_id = serie_id;
+        message.task_id = task_id;
+    }
 }
 
 // vim: ts=4 sw=4

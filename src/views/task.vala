@@ -14,8 +14,11 @@ namespace Views
         private Label _time_label;
         private Label name_label;
         private Arrow _arrow;
+        private Button _complete_button;
 
         public EventBox box { get { return _box; } }
+
+        public signal void complete_requested ();
 
         public Task (Models.Task task)
         {
@@ -33,6 +36,7 @@ namespace Views
             _url_label = builder.get_object ("Url") as LinkButton;
             _time_label = builder.get_object ("Time") as Label;
             _arrow = builder.get_object ("Arrow") as Arrow;
+            _complete_button = builder.get_object ("Complete") as Button;
 
             switch (task.priority) {
                 case Models.Priority.HIGHEST:
@@ -48,6 +52,11 @@ namespace Views
                     _viewport.get_style_context ().add_class ("priority-unknown");
                     break;
             }
+
+            _complete_button.clicked.connect (() => {
+                _complete_button.sensitive = false;
+                complete_requested ();
+            });
 
             _box.enter_notify_event.connect ((widget, event) => {
                 _viewport.get_style_context ().add_class ("hovered");

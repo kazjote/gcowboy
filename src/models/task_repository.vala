@@ -70,6 +70,14 @@ namespace Models
                 finished_adding();
             });
         }
+
+        public void complete_task (Task task)
+        {
+            _rtm.complete_task (task.list_id, task.serie_id, task.id, (message) => {
+                stderr.puts ("Complete task");
+            });
+        }
+
     }
 }
 
