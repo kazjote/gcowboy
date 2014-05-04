@@ -15,13 +15,16 @@ namespace Views
         private Label name_label;
         private Arrow _arrow;
         private Button _complete_button;
+        private Models.Task model;
 
         public EventBox box { get { return _box; } }
 
         public signal void complete_requested ();
 
-        public Task (Models.Task task)
+        public Task (Models.Task _model)
         {
+            model = _model;
+
             builder = new Builder ();
             try {
                 builder.add_from_file (UI_FILE);
@@ -38,7 +41,7 @@ namespace Views
             _arrow = builder.get_object ("Arrow") as Arrow;
             _complete_button = builder.get_object ("Complete") as Button;
 
-            switch (task.priority) {
+            switch (model.priority) {
                 case Models.Priority.HIGHEST:
                     _viewport.get_style_context ().add_class ("priority-highest");
                     break;
@@ -82,15 +85,15 @@ namespace Views
 
             _details.hide ();
 
-            if (task.url == "") {
+            if (model.url == "") {
                 _url_label.hide ();
             } else {
-                _url_label.label = shorten (task.url, 25);
-                _url_label.uri = task.url;
+                _url_label.label = shorten (model.url, 25);
+                _url_label.uri = model.url;
             }
-            _time_label.label = task.created;
+            _time_label.label = model.created;
 
-            name_label.label = shorten (task.name, 40);
+            name_label.label = shorten (model.name, 40);
         }
 
         private string shorten (string caption, int max_length) {

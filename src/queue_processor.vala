@@ -63,6 +63,10 @@ class QueueProcessor : Object
             requester.add_parameter ("timeline", message.timeline);
         if (message.parse)
             requester.add_parameter ("parse", "1");
+        if (message.task_id != null)
+            requester.add_parameter ("task_id", message.task_id.to_string ());
+        if (message.serie_id != null)
+            requester.add_parameter ("taskseries_id", message.serie_id.to_string ());
     }
 }
 

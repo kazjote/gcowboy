@@ -48,7 +48,19 @@ namespace Views
 
             clear_tasks ();
 
+            List<Models.Task> task_models = new List<Models.Task> ();
+
             _task_repository.get_task_list (_list_id).foreach ((task_model) => {
+                task_models.insert_sorted (task_model, (a, b) => {
+                    if (a.priority == b.priority) {
+                        return strcmp(a.name.up (), b.name.up ());
+                    }
+
+                    return (int) (a.priority > b.priority) - (int) (a.priority < b.priority);
+                });
+            });
+
+            task_models.foreach ((task_model) => {
                 var new_task = new Task (task_model);
 
                 new_task.complete_requested.connect (() => {

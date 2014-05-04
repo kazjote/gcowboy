@@ -59,6 +59,21 @@ public class RtmWrapper : Object
         message.name = task_name;
         message.parse = true;
 
+        push_with_timeline (message);
+    }
+
+    public void complete_task (int list_id, int serie_id, int task_id, MessageProcessedCallback callback)
+    {
+        var message = new QueueMessage (authenticator, "rtm.tasks.complete", callback);
+        message.list_id = list_id;
+        message.serie_id = serie_id;
+        message.task_id = task_id;
+
+        push_with_timeline (message);
+    }
+
+    private void push_with_timeline (QueueMessage message)
+    {
         var timeline_message = new QueueMessage(authenticator, "rtm.timelines.create", (_timeline_message) => {
             var _message = _timeline_message.followup;
 
@@ -69,14 +84,6 @@ public class RtmWrapper : Object
         timeline_message.followup = message;
 
         _request_queue.push(timeline_message);
-    }
-
-    public void complete_task (int list_id, int serie_id, int task_id, MessageProcessedCallback callback)
-    {
-        var message = new QueueMessage (authenticator, "rtm.tasks.complete", callback);
-        message.list_id = list_id;
-        message.serie_id = serie_id;
-        message.task_id = task_id;
     }
 }
 

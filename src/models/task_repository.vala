@@ -51,15 +51,23 @@ namespace Models
                         found_task.update_with (rtm_task_serie, rtm_task);
                     } else {
                         _tasks.insert_sorted (new Task (rtm_task_serie, rtm_task), (a, b) => {
-                            if (a.priority == b.priority) {
-                                return strcmp(a.name.up (), b.name.up ());
-                            }
+                            int cmp_result = 0;
 
-                            return (int) (a.priority > b.priority) - (int) (a.priority < b.priority);
+                            if ((cmp_result = intcmp (a.list_id, b.list_id)) != 0) {
+                                return cmp_result;
+                            } else if ((cmp_result = intcmp (a.serie_id, b.serie_id)) != 0) {
+                                return cmp_result;
+                            } else {
+                                return intcmp (a.id, b.id);
+                            }
                         });
                     }
                 });
             });
+        }
+
+        public static int intcmp (int a, int b) {
+            return (int) (a > b) - (int) (a < b);
         }
 
         public void add_task (string name)
