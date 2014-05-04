@@ -24,6 +24,7 @@ namespace Models
         public string created { get { return _created; } }
         public string url { get { return _url; } }
         public Priority priority { get { return _priority; } }
+        public bool completed { get; private set; }
 
         public Task (Rtm.TaskSerie task_serie, Rtm.Task task)
         {
@@ -38,6 +39,8 @@ namespace Models
             _name = task_serie.name;
             _created = task_serie.created;
             _url = task_serie.url;
+            completed = task.completed != "";
+
             switch (task.priority) {
                 case "1":
                     _priority = Priority.HIGHEST;

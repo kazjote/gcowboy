@@ -71,6 +71,11 @@ public class Main : Object
             var cell = new Gtk.CellRendererText ();
             list_view.insert_column_with_attributes (-1, "Lists", cell, "text", 0);
 
+            infobar = builder.get_object ("infobar") as InfoBar;
+
+            var notification_bar = builder.get_object ("NotificationBar") as InfoBar;
+            notification_area = new Views.NotificationArea (notification_bar);
+
             var task_box = builder.get_object ("task_box") as Box;
             task_repository = new Models.TaskRepository (rtm);
 
@@ -82,15 +87,10 @@ public class Main : Object
                 Rtm.TaskList rtm_task_list = val.get_object () as Rtm.TaskList;
 
                 task_list.remove ();
-                task_list = new Views.TaskList (rtm_task_list.id, task_repository, task_box);
+                task_list = new Views.TaskList (rtm_task_list.id, task_repository, task_box, notification_area);
                 task_list.draw ();
                 task_repository.fetch_task_list (rtm_task_list.id);
             });
-
-            infobar = builder.get_object ("infobar") as InfoBar;
-
-            var notification_bar = builder.get_object ("NotificationBar") as InfoBar;
-            notification_area = new Views.NotificationArea (notification_bar);
 
             var new_task_entry = builder.get_object ("NewTaskEntry") as Entry;
             new_task = new Views.NewTask (new_task_entry, task_repository, notification_area);

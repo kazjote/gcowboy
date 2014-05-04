@@ -8,7 +8,7 @@ void add_response_tests () {
                 <taskseries id="11" created="2006-05-07T10:19:54Z" modified="2006-05-07T10:19:54Z"
                            name="Get Bananas" source="api" url="http://bananas.com" location_id="">
                   <task id="111" due="" has_due_time="0" added="2006-05-07T10:19:54Z"
-                       completed="" deleted="" priority="N" postponed="0" estimate=""/>
+                       completed="true" deleted="" priority="N" postponed="0" estimate=""/>
                   <task id="112" due="" has_due_time="0" added="2006-05-07T10:19:54Z"
                        completed="" deleted="" priority="N" postponed="0" estimate=""/>
                 </taskseries>
@@ -41,9 +41,11 @@ void add_response_tests () {
 
         var task = task_serie.tasks.nth_data (0);
         assert (task.id == 111);
+        assert (task.completed == "true");
 
         task = task_serie.tasks.nth_data (1);
         assert (task.id == 112);
+        assert (task.completed == "");
 
         task_serie = response.task_series.nth_data (1);
         assert (task_serie.list_id == 1);

@@ -21,6 +21,7 @@ namespace Models
 
         public signal void tasks_updated ();
         public signal void finished_adding ();
+        public signal void finished_compleating (Task task);
 
         public TaskRepository (RtmWrapper rtm)
         {
@@ -54,7 +55,7 @@ namespace Models
 
         public void fetch_task_list (int list_id)
         {
-            _rtm.get_task_series (list_id, "status:incomplete", (message) => {
+            _rtm.get_task_series (list_id, "", (message) => {
                 update_tasks (message.rtm_response.task_series);
 
                 tasks_updated ();
@@ -96,7 +97,11 @@ namespace Models
         public void complete_task (Task task)
         {
             _rtm.complete_task (task.list_id, task.serie_id, task.id, (message) => {
-                stderr.puts ("Complete task");
+                var key = new FullID (message.list_id, message.serie_id, message.task_id);
+                var found_task = tasks.lookup (key);
+
+                fetch_task_list (message.list_id);
+                if (found_task != null) finished_compleating (found_task);
             });
         }
 

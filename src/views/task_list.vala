@@ -10,7 +10,7 @@ namespace Views
         private List<Task> _tasks;
         private bool active;
 
-        public TaskList (int list_id, Models.TaskRepository task_repository, Box box)
+        public TaskList (int list_id, Models.TaskRepository task_repository, Box box, NotificationArea notification_area)
         {
             _list_id = list_id;
             _box = box;
@@ -19,6 +19,12 @@ namespace Views
 
             task_repository.tasks_updated.connect (() => {
                 draw ();
+            });
+
+            task_repository.finished_compleating.connect ((task) => {
+                var name = task.name;
+
+                notification_area.set_notification (@"Task '$name' has been completed");
             });
 
             active = true;
@@ -51,13 +57,15 @@ namespace Views
             List<Models.Task> task_models = new List<Models.Task> ();
 
             _task_repository.get_task_list (_list_id).foreach ((task_model) => {
-                task_models.insert_sorted (task_model, (a, b) => {
-                    if (a.priority == b.priority) {
-                        return strcmp(a.name.up (), b.name.up ());
-                    }
+                if (!task_model.completed) {
+                    task_models.insert_sorted (task_model, (a, b) => {
+                        if (a.priority == b.priority) {
+                            return strcmp(a.name.up (), b.name.up ());
+                        }
 
-                    return (int) (a.priority > b.priority) - (int) (a.priority < b.priority);
-                });
+                        return (int) (a.priority > b.priority) - (int) (a.priority < b.priority);
+                    });
+                }
             });
 
             task_models.foreach ((task_model) => {
