@@ -86,7 +86,7 @@ public class Main : Object
                 list_store.get_value (iter, 1, out val);
                 Rtm.TaskList rtm_task_list = val.get_object () as Rtm.TaskList;
 
-                task_list.remove ();
+                if (task_list != null) task_list.remove ();
                 task_list = new Views.TaskList (rtm_task_list.id, task_repository, task_box, notification_area);
                 task_list.draw ();
                 task_repository.fetch_task_list (rtm_task_list.id);
