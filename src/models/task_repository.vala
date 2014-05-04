@@ -2,7 +2,21 @@ namespace Models
 {
     class TaskRepository : Object
     {
-        private List<Task> _tasks;
+        class FullID
+        {
+            public int list_id { public get; private set; }
+            public int serie_id { public get; private set; }
+            public int task_id { public get ;private set; }
+
+            public FullID (int _list_id, int _serie_id, int _task_id)
+            {
+                list_id = _list_id;
+                serie_id = _serie_id;
+                task_id = _task_id;
+            }
+        }
+
+        private Tree<FullID, Task> tasks;
         private RtmWrapper _rtm;
 
         public signal void tasks_updated ();
@@ -10,7 +24,17 @@ namespace Models
 
         public TaskRepository (RtmWrapper rtm)
         {
-            _tasks = new List<Task> ();
+            tasks = new Tree<FullID, Task> ((a, b) => {
+                int cmp_result = 0;
+
+                if ((cmp_result = intcmp (a.list_id, b.list_id)) != 0) {
+                    return cmp_result;
+                } else if ((cmp_result = intcmp (a.serie_id, b.serie_id)) != 0) {
+                    return cmp_result;
+                } else {
+                    return intcmp (a.task_id, b.task_id);
+                }
+            });
             _rtm = rtm;
         }
 
@@ -18,9 +42,11 @@ namespace Models
         {
             List<Task> sorted_list = new List<Task> ();
 
-            _tasks.foreach ((task) => {
+            tasks.foreach ((full_id, task) => {
                 if (task.list_id == list_id)
                     sorted_list.append(task);
+
+                return false;
             });
 
             return (owned) sorted_list;
@@ -39,28 +65,16 @@ namespace Models
         {
             rtm_task_series.foreach((rtm_task_serie) => {
                 rtm_task_serie.tasks.foreach ((rtm_task) => {
-                    Task found_task = null;
+                    FullID key = new FullID (rtm_task_serie.list_id,
+                        rtm_task_serie.id,
+                        rtm_task.id);
 
-                    _tasks.foreach ((task) => {
-                        if (task.id == rtm_task.id) {
-                            found_task = task;
-                        }
-                    });
+                    Task found_task = tasks.lookup (key);
 
                     if (found_task != null) {
                         found_task.update_with (rtm_task_serie, rtm_task);
                     } else {
-                        _tasks.insert_sorted (new Task (rtm_task_serie, rtm_task), (a, b) => {
-                            int cmp_result = 0;
-
-                            if ((cmp_result = intcmp (a.list_id, b.list_id)) != 0) {
-                                return cmp_result;
-                            } else if ((cmp_result = intcmp (a.serie_id, b.serie_id)) != 0) {
-                                return cmp_result;
-                            } else {
-                                return intcmp (a.id, b.id);
-                            }
-                        });
+                        tasks.insert (key, new Task (rtm_task_serie, rtm_task));
                     }
                 });
             });
