@@ -8,6 +8,7 @@ namespace Views
         private Box _box;
         private Models.TaskRepository _task_repository;
         private List<Task> _tasks;
+        private bool active;
 
         public TaskList (int list_id, Models.TaskRepository task_repository, Box box)
         {
@@ -19,9 +20,21 @@ namespace Views
             task_repository.tasks_updated.connect (() => {
                 draw ();
             });
+
+            active = true;
         }
 
         public void remove ()
+        {
+            active = false;
+
+            _tasks.foreach ((task) => {
+                _box.remove (task.box);
+                _tasks.remove (task);
+            });
+        }
+
+        private void clear_tasks ()
         {
             _tasks.foreach ((task) => {
                 _box.remove (task.box);
@@ -31,7 +44,9 @@ namespace Views
 
         public void draw ()
         {
-            remove ();
+            if (!active) return ;
+
+            clear_tasks ();
 
             _task_repository.get_task_list (_list_id).foreach ((task_model) => {
                 var new_task = new Task (task_model);

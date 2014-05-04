@@ -11,6 +11,8 @@ public class QueueMessage : Object
     public string? name { get; set; }
     public bool parse { get; set; default = false; }
     public string? timeline { get; set; }
+    public int? task_id { get; set; }
+    public int? serie_id { get; set; }
     public Rtm.Response? rtm_response { get; set; }
     public QueueMessage? followup { get; set; }
 
