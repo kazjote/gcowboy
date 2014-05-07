@@ -18,3 +18,8 @@ test_app
 **/*.stamp-t
 **/.deps
 **/*.a
+CMakeFiles
+CMakeCache.txt
+cmake_install.cmake
+gcowboy
+rtm_test
