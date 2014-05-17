@@ -10,7 +10,9 @@ namespace Views
         private EventBox _box;
         private Viewport _viewport;
         private Viewport _details;
+        private Label _url_title;
         private LinkButton _url_label;
+        private Label _time_title;
         private Label _time_label;
         private Label name_label;
         private Arrow _arrow;
@@ -36,8 +38,10 @@ namespace Views
             _box = builder.get_object ("Task") as EventBox;
             _viewport = builder.get_object ("TaskViewport") as Viewport;
             _details = builder.get_object ("Details") as Viewport;
-            _url_label = builder.get_object ("Url") as LinkButton;
-            _time_label = builder.get_object ("Time") as Label;
+            _url_title = builder.get_object ("UrlTitle") as Label;
+            _url_label = builder.get_object ("UrlLabel") as LinkButton;
+            _time_label = builder.get_object ("DueLabel") as Label;
+            _time_title = builder.get_object ("DueTitle") as Label;
             _arrow = builder.get_object ("Arrow") as Arrow;
             _complete_button = builder.get_object ("Complete") as Button;
 
@@ -87,11 +91,25 @@ namespace Views
 
             if (model.url == "") {
                 _url_label.hide ();
+                _url_title.hide ();
             } else {
                 _url_label.label = shorten (model.url, 25);
                 _url_label.uri = model.url;
+
+                _url_label.show ();
+                _url_title.show ();
             }
-            _time_label.label = model.created;
+
+            if (model.due != null) {
+                var local_due = model.due.to_local ();
+                _time_label.label = local_due.format ("%x");
+
+                _time_label.show ();
+                _time_title.show ();
+            } else {
+                _time_label.hide ();
+                _time_title.hide ();
+            }
 
             name_label.label = shorten (model.name, 40);
         }

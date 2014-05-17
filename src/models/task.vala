@@ -23,6 +23,7 @@ namespace Models
         public string name { get { return _name; } }
         public string created { get { return _created; } }
         public string url { get { return _url; } }
+        public DateTime due { public get; private set; }
         public Priority priority { get { return _priority; } }
         public bool completed { get; private set; }
 
@@ -39,6 +40,7 @@ namespace Models
             _name = task_serie.name;
             _created = task_serie.created;
             _url = task_serie.url;
+            due = task.due;
             completed = task.completed != "";
 
             switch (task.priority) {

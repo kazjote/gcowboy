@@ -58,6 +58,7 @@ set(RTM_TEST_SRC
     rtm/test/test.vala
     rtm/test/authenticator_test.vala
     rtm/test/response_test.vala
+    rtm/test/task_test.vala
 )
 
 set(GCOWBOY_PACKAGES
