@@ -1,6 +1,6 @@
 namespace Models
 {
-    public class StandardTaskList : Object, TaskList
+    public class StandardTaskListModel : Object, TaskList
     {
         public int id { get; private set; }
         public string name { get; private set; }
@@ -8,7 +8,7 @@ namespace Models
 
         private RtmWrapper rtm { get; private set; }
 
-        public StandardTaskList (TaskRepository repo, RtmWrapper _rtm, Rtm.TaskList rtm_task_list)
+        public StandardTaskListModel (TaskRepository repo, RtmWrapper _rtm, Rtm.TaskList rtm_task_list)
         {
             repository = repo;
             rtm = _rtm;

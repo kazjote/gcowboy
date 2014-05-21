@@ -30,7 +30,7 @@ namespace Models
             rtm.get_lists ((message) => {
                 message.rtm_response.task_lists.foreach ((task_list) => {
                     if (task_list.smart == false) {
-                        task_lists.append (new StandardTaskList (repository, rtm, task_list));
+                        task_lists.append (new StandardTaskListModel (repository, rtm, task_list));
                         stamp++;
 
                         var iter = Gtk.TreeIter ();
