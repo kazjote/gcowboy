@@ -28,6 +28,7 @@ public class Main : Object
     private Views.TaskList task_list;
     private Views.NotificationArea notification_area;
     private Views.NewTask new_task;
+    private Views.TaskListList task_list_list;
 
     public MainLoop loop; // TODO: Refactor
 
@@ -39,12 +40,8 @@ public class Main : Object
     const string UI_FILE = "src/gcowboy.ui";
 	const string CSS_FILE = "src/gcowboy.css";
 
-    /* ANJUTA: Widgets declaration for gcowboy.ui - DO NOT REMOVE */
-
-
     public Main (RtmWrapper rtm)
     {
-
         try
         {
             var builder = new Builder ();
@@ -65,8 +62,7 @@ public class Main : Object
             Gtk.StyleContext.add_provider_for_screen (screen, css_provider, STYLE_PROVIDER_PRIORITY_APPLICATION);
 
             var list_view = builder.get_object ("list_view") as TreeView;
-            list_store = new ListStore (2, typeof (string), typeof (Rtm.TaskList));
-            list_view.set_model (list_store);
+            // list_store = new ListStore (2, typeof (string), typeof (Rtm.TaskList));
 
             var cell = new Gtk.CellRendererText ();
             list_view.insert_column_with_attributes (-1, "Lists", cell, "text", 0);
@@ -79,17 +75,23 @@ public class Main : Object
             var task_box = builder.get_object ("task_box") as Box;
             task_repository = new Models.TaskRepository (rtm);
 
-            list_view.row_activated.connect ((path, column) => {
-                TreeIter iter;
-                list_store.get_iter (out iter, path);
-                Value val;
-                list_store.get_value (iter, 1, out val);
-                Rtm.TaskList rtm_task_list = val.get_object () as Rtm.TaskList;
+            Box task_list_list_box = builder.get_object ("task_list_box") as Box;
+            var task_list_list_model = new Models.TaskListList (task_repository, rtm);
 
-                if (task_list != null) task_list.remove ();
-                task_list = new Views.TaskList (rtm_task_list.id, task_repository, task_box, notification_area);
-                task_list.draw ();
-                task_repository.fetch_task_list (rtm_task_list.id);
+            task_list_list = new Views.TaskListList (task_list_list_model, list_view, task_box, notification_area);
+            task_list_list_model.fetch ();
+
+            list_view.row_activated.connect ((path, column) => {
+                // TreeIter iter;
+                // list_store.get_iter (out iter, path);
+                // Value val;
+                // list_store.get_value (iter, 1, out val);
+                // Rtm.TaskList rtm_task_list = val.get_object () as Rtm.TaskList;
+
+                // if (task_list != null) task_list.remove ();
+                // task_list = new Views.TaskList (rtm_task_list.id, task_repository, task_box, notification_area);
+                // task_list.draw ();
+                // task_repository.fetch_task_list (rtm_task_list.id);
             });
 
             var new_task_entry = builder.get_object ("NewTaskEntry") as Entry;
@@ -165,15 +167,15 @@ public class Main : Object
 
         });
 
-        rtm.get_lists ((message) => {
-            app.list_store.clear ();
+        // rtm.get_lists ((message) => {
+        //     app.list_store.clear ();
 
-            message.rtm_response.task_lists.foreach((task_list) => {
-                TreeIter iter;
-                app.list_store.append (out iter);
-                app.list_store.set (iter, 0, task_list.name, 1, task_list);
-            });
-        });
+        //     message.rtm_response.task_lists.foreach((task_list) => {
+        //         TreeIter iter;
+        //         app.list_store.append (out iter);
+        //         app.list_store.set (iter, 0, task_list.name, 1, task_list);
+        //     });
+        // });
 
         app.loop = new MainLoop ();
         TimeoutSource time = new TimeoutSource (200);

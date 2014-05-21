@@ -1,8 +1,8 @@
 namespace Models
 {
-    class TaskRepository : Object
+    public class TaskRepository : Object
     {
-        class FullID
+        public class FullID
         {
             public int list_id { public get; private set; }
             public int serie_id { public get; private set; }

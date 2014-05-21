@@ -2,7 +2,7 @@ using Gtk;
 
 namespace Views
 {
-    class NotificationArea : Object
+    public class NotificationArea : Object
     {
         private InfoBar infobar { get; set; }
         private Label label { get; set; }

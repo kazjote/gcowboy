@@ -48,10 +48,15 @@ set(GCOWBOY_SRC
     src/rtm_wrapper.vala
     src/views/task.vala
     src/views/task_list.vala
+    src/views/task_list_list.vala
+    src/views/task_list_list_item.vala
     src/views/notification_area.vala
     src/views/new_task.vala
     src/models/task.vala
     src/models/task_repository.vala
+    src/models/task_list.vala
+    src/models/task_list_list.vala
+    src/models/standard_task_list.vala
 )
 
 set(RTM_TEST_SRC

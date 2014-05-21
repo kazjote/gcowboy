@@ -1,13 +1,13 @@
 namespace Models
 {
-    enum Priority {
+    public enum Priority {
         HIGHEST,
         MEDIUM,
         LOWEST,
         UNKNOWN
     }
 
-    class Task : Object
+    public class Task : Object
     {
         private int _id;
         private int _list_id;
