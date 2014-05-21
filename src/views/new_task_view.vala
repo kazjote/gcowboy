@@ -2,13 +2,13 @@ using Gtk;
 
 namespace Views
 {
-    class NewTask : Object
+    class NewTaskView : Object
     {
         private Entry entry { get; set; }
         private NotificationArea notification_area { get; set; }
         private Models.TaskRepository repository { get; set; }
 
-        public NewTask (Entry _entry, Models.TaskRepository _repository, NotificationArea _notification_area)
+        public NewTaskView (Entry _entry, Models.TaskRepository _repository, NotificationArea _notification_area)
         {
             entry = _entry;
             notification_area = _notification_area;
