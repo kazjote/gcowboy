@@ -23,7 +23,6 @@ public class Main : Object
 {
 
     private InfoBar infobar;
-    private ListStore list_store;
     private Models.TaskRepository task_repository;
     private Views.TaskList task_list;
     private Views.NotificationArea notification_area;
@@ -62,7 +61,6 @@ public class Main : Object
             Gtk.StyleContext.add_provider_for_screen (screen, css_provider, STYLE_PROVIDER_PRIORITY_APPLICATION);
 
             var list_view = builder.get_object ("list_view") as TreeView;
-            // list_store = new ListStore (2, typeof (string), typeof (Rtm.TaskList));
 
             var cell = new Gtk.CellRendererText ();
             list_view.insert_column_with_attributes (-1, "Lists", cell, "text", 0);
@@ -81,23 +79,9 @@ public class Main : Object
             task_list_list = new Views.TaskListList (task_list_list_model, list_view, task_box, notification_area);
             task_list_list_model.fetch ();
 
-            list_view.row_activated.connect ((path, column) => {
-                // TreeIter iter;
-                // list_store.get_iter (out iter, path);
-                // Value val;
-                // list_store.get_value (iter, 1, out val);
-                // Rtm.TaskList rtm_task_list = val.get_object () as Rtm.TaskList;
-
-                // if (task_list != null) task_list.remove ();
-                // task_list = new Views.TaskList (rtm_task_list.id, task_repository, task_box, notification_area);
-                // task_list.draw ();
-                // task_repository.fetch_task_list (rtm_task_list.id);
-            });
-
             var new_task_entry = builder.get_object ("NewTaskEntry") as Entry;
             new_task = new Views.NewTask (new_task_entry, task_repository, notification_area);
 
-            /* ANJUTA: Widgets initialization for gcowboy.ui - DO NOT REMOVE */
             window.show ();
 
             infobar.hide ();
@@ -166,16 +150,6 @@ public class Main : Object
             }
 
         });
-
-        // rtm.get_lists ((message) => {
-        //     app.list_store.clear ();
-
-        //     message.rtm_response.task_lists.foreach((task_list) => {
-        //         TreeIter iter;
-        //         app.list_store.append (out iter);
-        //         app.list_store.set (iter, 0, task_list.name, 1, task_list);
-        //     });
-        // });
 
         app.loop = new MainLoop ();
         TimeoutSource time = new TimeoutSource (200);
