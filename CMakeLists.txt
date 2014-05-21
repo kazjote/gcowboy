@@ -53,7 +53,7 @@ set(GCOWBOY_SRC
     src/views/new_task.vala
     src/models/task.vala
     src/models/task_repository.vala
-    src/models/task_list.vala
+    src/models/task_list_interface.vala
     src/models/task_lists_model.vala
     src/models/standard_task_list_model.vala
 )

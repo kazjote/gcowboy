@@ -2,7 +2,7 @@ namespace Models
 {
     public class TaskListsModel : Object, Gtk.TreeModel
     {
-        private List<TaskList> task_lists;
+        private List<TaskListInterface> task_lists;
         private RtmWrapper rtm { get; set; }
         private TaskRepository repository { get; set; }
         private int stamp = 0;
@@ -15,12 +15,12 @@ namespace Models
             rtm = _rtm;
         }
 
-        public TaskList get_task_list(int i)
+        public TaskListInterface get_task_list(int i)
         {
             return task_lists.nth_data (i);
         }
 
-        public List<TaskList> get_task_lists ()
+        public List<TaskListInterface> get_task_lists ()
         {
             return task_lists.copy ();
         }
@@ -66,11 +66,11 @@ namespace Models
         public void get_value (Gtk.TreeIter iter, int column, out Value val) {
             assert (iter.stamp == stamp);
 
-            TaskList task_list = task_lists.nth_data ((int) iter.user_data);
+            TaskListInterface task_list_interface = task_lists.nth_data ((int) iter.user_data);
             switch (column) {
             case 0:
                 val = Value (typeof (string));
-                val.set_string (task_list.name);
+                val.set_string (task_list_interface.name);
                 break;
             default:
                 val = Value (Type.INVALID);

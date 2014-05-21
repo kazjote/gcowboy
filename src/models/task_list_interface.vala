@@ -1,6 +1,6 @@
 namespace Models
 {
-    public interface TaskList : Object
+    public interface TaskListInterface : Object
     {
         public abstract int id { public get; set; }
         public abstract string name { public get; set; }

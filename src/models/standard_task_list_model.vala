@@ -1,6 +1,6 @@
 namespace Models
 {
-    public class StandardTaskListModel : Object, TaskList
+    public class StandardTaskListModel : Object, TaskListInterface
     {
         public int id { get; private set; }
         public string name { get; private set; }
