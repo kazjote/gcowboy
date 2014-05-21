@@ -7,7 +7,7 @@ namespace Models
         UNKNOWN
     }
 
-    public class Task : Object
+    public class TaskModel : Object
     {
         private int _id;
         private int _list_id;
@@ -27,7 +27,7 @@ namespace Models
         public Priority priority { get { return _priority; } }
         public bool completed { get; private set; }
 
-        public Task (Rtm.TaskSerie task_serie, Rtm.Task task)
+        public TaskModel (Rtm.TaskSerie task_serie, Rtm.Task task)
         {
             update_with (task_serie, task);
         }

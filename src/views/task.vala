@@ -17,13 +17,13 @@ namespace Views
         private Label name_label;
         private Arrow _arrow;
         private Button _complete_button;
-        private Models.Task model;
+        private Models.TaskModel model;
 
         public EventBox box { get { return _box; } }
 
         public signal void complete_requested ();
 
-        public Task (Models.Task _model)
+        public Task (Models.TaskModel _model)
         {
             model = _model;
 

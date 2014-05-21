@@ -51,7 +51,7 @@ set(GCOWBOY_SRC
     src/views/task_list_list.vala
     src/views/notification_area.vala
     src/views/new_task.vala
-    src/models/task.vala
+    src/models/task_model.vala
     src/models/task_repository.vala
     src/models/task_list_interface.vala
     src/models/task_lists_model.vala

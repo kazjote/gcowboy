@@ -16,7 +16,7 @@ namespace Models
             name = rtm_task_list.name;
         }
 
-        public List<Task> get_tasks ()
+        public List<TaskModel> get_tasks ()
         {
             return repository.get_task_list (id);
         }

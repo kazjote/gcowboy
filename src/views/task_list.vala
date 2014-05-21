@@ -54,7 +54,7 @@ namespace Views
 
             clear_tasks ();
 
-            List<Models.Task> task_models = new List<Models.Task> ();
+            List<Models.TaskModel> task_models = new List<Models.TaskModel> ();
 
             _task_repository.get_task_list (_list_id).foreach ((task_model) => {
                 if (!task_model.completed) {

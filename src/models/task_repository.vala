@@ -16,16 +16,16 @@ namespace Models
             }
         }
 
-        private Tree<FullID, Task> tasks;
+        private Tree<FullID, TaskModel> task_models;
         private RtmWrapper _rtm;
 
         public signal void tasks_updated ();
         public signal void finished_adding ();
-        public signal void finished_compleating (Task task);
+        public signal void finished_compleating (TaskModel task_model);
 
         public TaskRepository (RtmWrapper rtm)
         {
-            tasks = new Tree<FullID, Task> ((a, b) => {
+            task_models = new Tree<FullID, TaskModel> ((a, b) => {
                 int cmp_result = 0;
 
                 if ((cmp_result = intcmp (a.list_id, b.list_id)) != 0) {
@@ -39,13 +39,13 @@ namespace Models
             _rtm = rtm;
         }
 
-        public List<Task> get_task_list (int list_id)
+        public List<TaskModel> get_task_list (int list_id)
         {
-            List<Task> sorted_list = new List<Task> ();
+            List<TaskModel> sorted_list = new List<TaskModel> ();
 
-            tasks.foreach ((full_id, task) => {
-                if (task.list_id == list_id)
-                    sorted_list.append(task);
+            task_models.foreach ((full_id, task_model) => {
+                if (task_model.list_id == list_id)
+                    sorted_list.append(task_model);
 
                 return false;
             });
@@ -70,12 +70,12 @@ namespace Models
                         rtm_task_serie.id,
                         rtm_task.id);
 
-                    Task found_task = tasks.lookup (key);
+                    TaskModel found_task_model = task_models.lookup (key);
 
-                    if (found_task != null) {
-                        found_task.update_with (rtm_task_serie, rtm_task);
+                    if (found_task_model != null) {
+                        found_task_model.update_with (rtm_task_serie, rtm_task);
                     } else {
-                        tasks.insert (key, new Task (rtm_task_serie, rtm_task));
+                        task_models.insert (key, new TaskModel (rtm_task_serie, rtm_task));
                     }
                 });
             });
@@ -94,14 +94,14 @@ namespace Models
             });
         }
 
-        public void complete_task (Task task)
+        public void complete_task (TaskModel task_model)
         {
-            _rtm.complete_task (task.list_id, task.serie_id, task.id, (message) => {
+            _rtm.complete_task (task_model.list_id, task_model.serie_id, task_model.id, (message) => {
                 var key = new FullID (message.list_id, message.serie_id, message.task_id);
-                var found_task = tasks.lookup (key);
+                var found_task_model = task_models.lookup (key);
 
                 fetch_task_list (message.list_id);
-                if (found_task != null) finished_compleating (found_task);
+                if (found_task_model != null) finished_compleating (found_task_model);
             });
         }
 
