@@ -1,6 +1,6 @@
 namespace Models
 {
-    public class TaskListList : Object, Gtk.TreeModel
+    public class TaskListsModel : Object, Gtk.TreeModel
     {
         private List<TaskList> task_lists;
         private RtmWrapper rtm { get; set; }
@@ -9,7 +9,7 @@ namespace Models
 
         public signal void list_updated ();
 
-        public TaskListList (TaskRepository repo, RtmWrapper _rtm)
+        public TaskListsModel (TaskRepository repo, RtmWrapper _rtm)
         {
             repository = repo;
             rtm = _rtm;

@@ -27,7 +27,7 @@ public class Main : Object
     private Views.TaskList task_list;
     private Views.NotificationArea notification_area;
     private Views.NewTask new_task;
-    private Views.TaskListList task_list_list;
+    private Views.TaskListsModel task_list_model;
 
     public MainLoop loop; // TODO: Refactor
 
@@ -73,11 +73,10 @@ public class Main : Object
             var task_box = builder.get_object ("task_box") as Box;
             task_repository = new Models.TaskRepository (rtm);
 
-            Box task_list_list_box = builder.get_object ("task_list_box") as Box;
-            var task_list_list_model = new Models.TaskListList (task_repository, rtm);
+            var task_lists_model = new Models.TaskListsModel (task_repository, rtm);
 
-            task_list_list = new Views.TaskListList (task_list_list_model, list_view, task_box, notification_area);
-            task_list_list_model.fetch ();
+            task_list_list = new Views.TaskListsModel (task_lists_model, list_view, task_box, notification_area);
+            task_lists_model.fetch ();
 
             var new_task_entry = builder.get_object ("NewTaskEntry") as Entry;
             new_task = new Views.NewTask (new_task_entry, task_repository, notification_area);
