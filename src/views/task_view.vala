@@ -2,7 +2,7 @@ using Gtk;
 
 namespace Views
 {
-    class Task
+    class TaskView
     {
         const string UI_FILE = "src/views/task.ui";
 
@@ -23,7 +23,7 @@ namespace Views
 
         public signal void complete_requested ();
 
-        public Task (Models.TaskModel _model)
+        public TaskView (Models.TaskModel _model)
         {
             model = _model;
 

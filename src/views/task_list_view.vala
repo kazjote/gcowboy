@@ -7,7 +7,7 @@ namespace Views
         private int _list_id;
         private Box _box;
         private Models.TaskRepository _task_repository;
-        private List<Task> _tasks;
+        private List<TaskView> _task_views;
         private bool active;
 
         public TaskListView (int list_id, Models.TaskRepository task_repository, Box box, NotificationAreaView notification_area_view)
@@ -15,7 +15,7 @@ namespace Views
             _list_id = list_id;
             _box = box;
             _task_repository = task_repository;
-            _tasks = new List<Task> ();
+            _task_views = new List<TaskView> ();
 
             task_repository.tasks_updated.connect (() => {
                 draw ();
@@ -34,17 +34,17 @@ namespace Views
         {
             active = false;
 
-            _tasks.foreach ((task) => {
+            _task_views.foreach ((task) => {
                 _box.remove (task.box);
-                _tasks.remove (task);
+                _task_views.remove (task);
             });
         }
 
         private void clear_tasks ()
         {
-            _tasks.foreach ((task) => {
+            _task_views.foreach ((task) => {
                 _box.remove (task.box);
-                _tasks.remove (task);
+                _task_views.remove (task);
             });
         }
 
@@ -69,13 +69,13 @@ namespace Views
             });
 
             task_models.foreach ((task_model) => {
-                var new_task = new Task (task_model);
+                var new_task = new TaskView (task_model);
 
                 new_task.complete_requested.connect (() => {
                     _task_repository.complete_task (task_model);
                 });
 
-                _tasks.append (new_task);
+                _task_views.append (new_task);
 
                 var task_box = new_task.box;
 
