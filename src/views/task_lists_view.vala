@@ -8,7 +8,7 @@ namespace Views
         private TreeView list_view { get; private set; }
         private Box task_list_box { get; set; }
         private NotificationAreaView notification_area_view { get; set; }
-        private TaskList task_list_view { get; set; }
+        private TaskListView task_list_view { get; set; }
 
         public TaskListsView (Models.TaskListsModel task_lists_model,
                 TreeView _list_view,
@@ -27,7 +27,7 @@ namespace Views
                 var task_list = model.get_task_list (index);
 
                 if (task_list_view != null) task_list_view.remove ();
-                task_list_view = new Views.TaskList (task_list.id, task_list.repository, task_list_box, notification_area_view);
+                task_list_view = new Views.TaskListView (task_list.id, task_list.repository, task_list_box, notification_area_view);
                 task_list_view.draw ();
 
                 task_list.repository.fetch_task_list (task_list.id);

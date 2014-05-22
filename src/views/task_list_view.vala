@@ -2,7 +2,7 @@ using Gtk;
 
 namespace Views
 {
-    class TaskList : Object
+    class TaskListView : Object
     {
         private int _list_id;
         private Box _box;
@@ -10,7 +10,7 @@ namespace Views
         private List<Task> _tasks;
         private bool active;
 
-        public TaskList (int list_id, Models.TaskRepository task_repository, Box box, NotificationAreaView notification_area_view)
+        public TaskListView (int list_id, Models.TaskRepository task_repository, Box box, NotificationAreaView notification_area_view)
         {
             _list_id = list_id;
             _box = box;

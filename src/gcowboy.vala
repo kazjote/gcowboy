@@ -24,7 +24,6 @@ public class Main : Object
 
     private InfoBar infobar;
     private Models.TaskRepository task_repository;
-    private Views.TaskList task_list;
     private Views.NotificationAreaView notification_area_view;
     private Views.NewTaskView new_task_view;
     private Views.TaskListsView task_lists_view;

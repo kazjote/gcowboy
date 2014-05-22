@@ -47,7 +47,7 @@ set(GCOWBOY_SRC
     src/queue_processor.vala
     src/rtm_wrapper.vala
     src/views/task.vala
-    src/views/task_list.vala
+    src/views/task_list_view.vala
     src/views/task_lists_view.vala
     src/views/notification_area_view.vala
     src/views/new_task_view.vala
