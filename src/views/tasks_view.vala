@@ -4,25 +4,23 @@ namespace Views
 {
     class TasksView : Object
     {
-        private int _list_id;
         private Box _box;
-        private Models.TaskRepository _task_repository;
         private List<TaskView> _task_views;
         private bool active;
+        private Models.TaskListInterface task_list { get; set; }
 
-        public TasksView (int list_id, Models.TaskRepository task_repository, Box box, NotificationAreaView notification_area_view)
+        public TasksView (Models.TaskListInterface _task_list, Box box, NotificationAreaView notification_area_view)
         {
-            _list_id = list_id;
             _box = box;
-            _task_repository = task_repository;
             _task_views = new List<TaskView> ();
+            task_list = _task_list;
 
-            task_repository.tasks_updated.connect (() => {
+            task_list.tasks_updated.connect (() => {
                 draw ();
             });
 
-            task_repository.finished_compleating.connect ((task) => {
-                var name = task.name;
+            task_list.task_completed.connect ((task_model) => {
+                var name = task_model.name;
 
                 notification_area_view.set_notification (@"Task '$name' has been completed");
             });
@@ -56,7 +54,7 @@ namespace Views
 
             List<Models.TaskModel> task_models = new List<Models.TaskModel> ();
 
-            _task_repository.get_task_list (_list_id).foreach ((task_model) => {
+            task_list.get_tasks ().foreach ((task_model) => {
                 if (!task_model.completed) {
                     task_models.insert_sorted (task_model, (a, b) => {
                         if (a.priority == b.priority) {
@@ -72,7 +70,7 @@ namespace Views
                 var new_task = new TaskView (task_model);
 
                 new_task.complete_requested.connect (() => {
-                    _task_repository.complete_task (task_model);
+                    task_list.complete_task (task_model);
                 });
 
                 _task_views.append (new_task);

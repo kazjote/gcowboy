@@ -27,7 +27,7 @@ namespace Views
                 var task_list = model.get_task_list (index);
 
                 if (tasks_view != null) tasks_view.remove ();
-                tasks_view = new Views.TasksView (task_list.id, task_list.repository, task_list_box, notification_area_view);
+                tasks_view = new TasksView (task_list, task_list_box, notification_area_view);
                 tasks_view.draw ();
 
                 task_list.repository.fetch_task_list (task_list.id);
