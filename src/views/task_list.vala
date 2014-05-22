@@ -10,7 +10,7 @@ namespace Views
         private List<Task> _tasks;
         private bool active;
 
-        public TaskList (int list_id, Models.TaskRepository task_repository, Box box, NotificationArea notification_area)
+        public TaskList (int list_id, Models.TaskRepository task_repository, Box box, NotificationAreaView notification_area_view)
         {
             _list_id = list_id;
             _box = box;
@@ -24,7 +24,7 @@ namespace Views
             task_repository.finished_compleating.connect ((task) => {
                 var name = task.name;
 
-                notification_area.set_notification (@"Task '$name' has been completed");
+                notification_area_view.set_notification (@"Task '$name' has been completed");
             });
 
             active = true;

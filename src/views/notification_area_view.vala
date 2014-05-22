@@ -2,12 +2,12 @@ using Gtk;
 
 namespace Views
 {
-    public class NotificationArea : Object
+    public class NotificationAreaView : Object
     {
         private InfoBar infobar { get; set; }
         private Label label { get; set; }
 
-        public NotificationArea (InfoBar _infobar)
+        public NotificationAreaView (InfoBar _infobar)
         {
             infobar = _infobar;
 

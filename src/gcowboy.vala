@@ -25,7 +25,7 @@ public class Main : Object
     private InfoBar infobar;
     private Models.TaskRepository task_repository;
     private Views.TaskList task_list;
-    private Views.NotificationArea notification_area;
+    private Views.NotificationAreaView notification_area_view;
     private Views.NewTaskView new_task_view;
     private Views.TaskListList task_list_list;
 
@@ -68,18 +68,18 @@ public class Main : Object
             infobar = builder.get_object ("infobar") as InfoBar;
 
             var notification_bar = builder.get_object ("NotificationBar") as InfoBar;
-            notification_area = new Views.NotificationArea (notification_bar);
+            notification_area_view = new Views.NotificationAreaView (notification_bar);
 
             var task_box = builder.get_object ("task_box") as Box;
             task_repository = new Models.TaskRepository (rtm);
 
             var task_lists_model = new Models.TaskListsModel (task_repository, rtm);
 
-            task_list_list = new Views.TaskListList (task_lists_model, list_view, task_box, notification_area);
+            task_list_list = new Views.TaskListList (task_lists_model, list_view, task_box, notification_area_view);
             task_lists_model.fetch ();
 
             var new_task_entry = builder.get_object ("NewTaskEntry") as Entry;
-            new_task_view = new Views.NewTaskView (new_task_entry, task_repository, notification_area);
+            new_task_view = new Views.NewTaskView (new_task_entry, task_repository, notification_area_view);
 
             window.show ();
 

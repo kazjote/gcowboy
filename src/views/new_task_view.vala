@@ -5,18 +5,18 @@ namespace Views
     class NewTaskView : Object
     {
         private Entry entry { get; set; }
-        private NotificationArea notification_area { get; set; }
+        private NotificationAreaView notification_area_view { get; set; }
         private Models.TaskRepository repository { get; set; }
 
-        public NewTaskView (Entry _entry, Models.TaskRepository _repository, NotificationArea _notification_area)
+        public NewTaskView (Entry _entry, Models.TaskRepository _repository, NotificationAreaView _notification_area_view)
         {
             entry = _entry;
-            notification_area = _notification_area;
+            notification_area_view = _notification_area_view;
             repository = _repository;
 
             repository.finished_adding.connect (() => {
                 var text = shorten (entry.text, 40);
-                notification_area.set_notification (@"Task '$text' has been added");
+                notification_area_view.set_notification (@"Task '$text' has been added");
                 entry.sensitive = true;
                 entry.text = "";
             });
