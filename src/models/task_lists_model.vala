@@ -31,16 +31,18 @@ namespace Models
                 message.rtm_response.task_lists.foreach ((task_list) => {
                     if (task_list.smart == false) {
                         task_lists.append (new StandardTaskListModel (repository, rtm, task_list));
-                        stamp++;
-
-                        var iter = Gtk.TreeIter ();
-                        iter.stamp = stamp;
-                        iter.user_data = (task_lists.length () - 1).to_pointer ();
-
-                        var path = get_path (iter);
-
-                        row_inserted (path, iter);
+                    } else {
+                        task_lists.append (new SmartTaskListModel (repository, rtm, task_list));
                     }
+                    stamp++;
+
+                    var iter = Gtk.TreeIter ();
+                    iter.stamp = stamp;
+                    iter.user_data = (task_lists.length () - 1).to_pointer ();
+
+                    var path = get_path (iter);
+
+                    row_inserted (path, iter);
                 });
 
                 list_updated ();

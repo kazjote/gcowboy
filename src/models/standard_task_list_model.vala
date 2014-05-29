@@ -21,6 +21,11 @@ namespace Models
             });
         }
 
+        public void update ()
+        {
+            repository.fetch_task_list (id);
+        }
+
         public List<TaskModel> get_tasks ()
         {
             return repository.get_task_list (id);

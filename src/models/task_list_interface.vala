@@ -7,6 +7,8 @@ namespace Models
         public abstract List<TaskModel> get_tasks ();
         public abstract TaskRepository repository { get; set; }
 
+        public abstract void update ();
+
         public signal void tasks_updated ();
 
         // later on we should have only tasks_updated signal which points to tasks
