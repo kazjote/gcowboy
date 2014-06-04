@@ -55,7 +55,6 @@ namespace Models
             switch (index) {
             case 0:
                 return typeof (string);
-                break;
             default:
                 return Type.INVALID;
             }
