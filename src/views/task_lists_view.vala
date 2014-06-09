@@ -33,6 +33,12 @@ namespace Views
                 task_list.update ();
             });
         }
+
+        public void activate_path (TreePath tree_path)
+        {
+            list_view.get_selection ().select_path (tree_path);
+            list_view.row_activated (tree_path, list_view.get_column (0));
+        }
     }
 }
 

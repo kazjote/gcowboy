@@ -34,19 +34,37 @@ namespace Models
                     } else {
                         task_lists.append (new SmartTaskListModel (repository, rtm, task_list));
                     }
-                    stamp++;
 
-                    var iter = Gtk.TreeIter ();
-                    iter.stamp = stamp;
-                    iter.user_data = (task_lists.length () - 1).to_pointer ();
-
-                    var path = get_path (iter);
-
-                    row_inserted (path, iter);
+                    notify_addition ();
                 });
 
                 list_updated ();
             });
+        }
+
+        public Gtk.TreePath add_task_list (TaskListInterface task_list)
+        {
+            task_lists.append (task_list);
+
+            var tree_path = notify_addition ();
+            list_updated ();
+
+            return tree_path;
+        }
+
+        private Gtk.TreePath notify_addition ()
+        {
+            stamp++;
+
+            var iter = Gtk.TreeIter ();
+            iter.stamp = stamp;
+            iter.user_data = (task_lists.length () - 1).to_pointer ();
+
+            var tree_path = get_path (iter);
+
+            row_inserted (tree_path, iter);
+
+            return tree_path;
         }
 
         // From documentation

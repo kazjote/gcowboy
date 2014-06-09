@@ -46,7 +46,8 @@ public class RtmWrapper : Object
     public void get_task_series (int? list_id, string? filter, MessageProcessedCallback callback)
     {
         var message = new QueueMessage (authenticator, "rtm.tasks.getList", callback);
-        message.list_id = list_id;
+
+        if (list_id != null) message.list_id = list_id;
         message.filter = filter;
 
         _request_queue.push(message);

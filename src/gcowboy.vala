@@ -27,6 +27,7 @@ public class Main : Object
     private Views.NotificationAreaView notification_area_view;
     private Views.NewTaskView new_task_view;
     private Views.TaskListsView task_lists_view;
+    private Controllers.SearchController search_controller;
 
     public MainLoop loop; // TODO: Refactor
 
@@ -79,6 +80,9 @@ public class Main : Object
 
             var new_task_entry = builder.get_object ("NewTaskEntry") as Entry;
             new_task_view = new Views.NewTaskView (new_task_entry, task_repository, notification_area_view);
+
+            var search_entry = builder.get_object ("SearchEntry") as Entry;
+            search_controller = new Controllers.SearchController (search_entry, task_repository, rtm, task_lists_model, task_lists_view);
 
             window.show ();
 

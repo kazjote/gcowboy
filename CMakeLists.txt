@@ -57,6 +57,8 @@ set(GCOWBOY_SRC
     src/models/task_lists_model.vala
     src/models/standard_task_list_model.vala
     src/models/smart_task_list_model.vala
+    src/models/search_task_list_model.vala
+    src/controllers/search_controller.vala
 )
 
 set(RTM_TEST_SRC

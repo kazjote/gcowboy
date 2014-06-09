@@ -2,7 +2,7 @@ using Gtk;
 
 namespace Views
 {
-    class NewTaskView : Object
+    public class NewTaskView : Object
     {
         private Entry entry { get; set; }
         private NotificationAreaView notification_area_view { get; set; }
