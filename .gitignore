@@ -3,7 +3,7 @@ INSTALL
 **/Makefile.in
 **/aclocal.m4
 autom4te.cache
-config*
+src/config.vala
 depcomp
 install-sh
 libtool
@@ -23,4 +23,5 @@ CMakeCache.txt
 cmake_install.cmake
 gcowboy
 rtm_test
+install_manifest.txt
 *~

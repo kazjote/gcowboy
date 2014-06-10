@@ -4,8 +4,6 @@ namespace Views
 {
     class TaskView
     {
-        const string UI_FILE = "src/views/task.ui";
-
         private Builder builder;
         private EventBox _box;
         private Viewport _viewport;
@@ -29,7 +27,7 @@ namespace Views
 
             builder = new Builder ();
             try {
-                builder.add_from_file (UI_FILE);
+                builder.add_from_file (Config.TASK_UI_FILE);
             } catch (GLib.Error e) {
                 stderr.printf ("Could not load UI: %s\n", e.message);
             }

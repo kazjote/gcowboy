@@ -40,7 +40,16 @@ set(RTM_SRC
     src/http_proxy_interface.vala
 )
 
+if(${DEVELOPMENT})
+    set(UI_PATH "src")
+else(${DEVELOPMENT})
+    set(UI_PATH "${CMAKE_INSTALL_PREFIX}/gcowboy")
+endif(${DEVELOPMENT})
+
+configure_file(src/config.vala.in src/config.vala)
+
 set(GCOWBOY_SRC
+    src/config.vala
     src/http_proxy.vala
     src/gcowboy.vala
     src/queue_message.vala
@@ -59,6 +68,10 @@ set(GCOWBOY_SRC
     src/models/smart_task_list_model.vala
     src/models/search_task_list_model.vala
     src/controllers/search_controller.vala
+)
+
+set(GCOWBOY_SRC
+    ${GCOWBOY_SRC}
 )
 
 set(RTM_TEST_SRC
@@ -86,6 +99,13 @@ OPTIONS
 )
 
 add_executable(gcowboy ${VALA_GCOWBOY_C})
+
+INSTALL(TARGETS gcowboy
+    RUNTIME DESTINATION bin
+)
+
+INSTALL(DIRECTORY src/ui DESTINATION share/gcowboy
+        FILES_MATCHING REGEX ".(ui|css)")
 
 # RTM TEST
 

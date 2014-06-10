@@ -18,7 +18,6 @@
 using GLib;
 using Gtk;
 
-
 public class Main : Object
 {
 
@@ -35,16 +34,13 @@ public class Main : Object
      * Uncomment this line when you are done testing and building a tarball
      * or installing
      */
-    //const string UI_FILE = Config.PACKAGE_DATA_DIR + "/ui/" + "gcowboy.ui";
-    const string UI_FILE = "src/gcowboy.ui";
-	const string CSS_FILE = "src/gcowboy.css";
 
     public Main (RtmWrapper rtm)
     {
         try
         {
             var builder = new Builder ();
-            builder.add_from_file (UI_FILE);
+            builder.add_from_file (Config.GCOWBOY_UI_FILE);
 
             var window = builder.get_object ("window") as Window;
 
@@ -56,7 +52,7 @@ public class Main : Object
 
             var screen = Gdk.Screen.get_default ();
             var css_provider = new CssProvider(); 
-            css_provider.load_from_file (File.new_for_path (CSS_FILE));
+            css_provider.load_from_file (File.new_for_path (Config.GCOWBOY_CSS_FILE));
 
             Gtk.StyleContext.add_provider_for_screen (screen, css_provider, STYLE_PROVIDER_PRIORITY_APPLICATION);
 

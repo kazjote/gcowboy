@@ -1,0 +1,8 @@
+public class Config : Object
+{
+    public const string GCOWBOY_UI_FILE = "@UI_PATH@/ui/gcowboy.ui";
+    public const string GCOWBOY_CSS_FILE = "@UI_PATH@/ui/gcowboy.css";
+    public const string TASK_UI_FILE = "@UI_PATH@/ui/task.ui";
+}
+
+// vim: ts=4 sw=4
