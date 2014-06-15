@@ -107,6 +107,16 @@ INSTALL(TARGETS gcowboy
 INSTALL(DIRECTORY src/ui DESTINATION share/gcowboy
         FILES_MATCHING REGEX ".(ui|css)")
 
+set(CPACK_GENERATOR DEB)
+set(CPACK_DEBIAN_PACKAGE_DEPENDS "debhelper (>= 8.0.0), cmake, valac, libgtk-3-dev, libgee-dev, libxml2-dev, libsoup2.4-dev")
+set(CPACK_DEBIAN_PACKAGE_DESCRIPTION "Manage your Remember the Milk tasks from desktop app.")
+set(CPACK_DEBIAN_PACKAGE_MAINTAINER "Kacper Bielecki (kazjote) <kazjote@gmail.com>")
+set(CPACK_DEBIAN_PACKAGE_NAME gcowboy)
+set(CPACK_DEBIAN_PACKAGE_SECTION unknown)
+set(CPACK_DEBIAN_PACKAGE_VERSION 0.3.0)
+
+include(CPack)
+
 # RTM TEST
 
 # vala_precompile(VALA_RTM_C
