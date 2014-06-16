@@ -40,14 +40,6 @@ set(RTM_SRC
     src/http_proxy_interface.vala
 )
 
-if(${DEVELOPMENT})
-    set(UI_PATH "src")
-else(${DEVELOPMENT})
-    set(UI_PATH "${CMAKE_INSTALL_PREFIX}/gcowboy")
-endif(${DEVELOPMENT})
-
-configure_file(src/config.vala.in src/config.vala)
-
 set(GCOWBOY_SRC
     src/config.vala
     src/http_proxy.vala
@@ -115,7 +107,17 @@ set(CPACK_DEBIAN_PACKAGE_NAME gcowboy)
 set(CPACK_DEBIAN_PACKAGE_SECTION unknown)
 set(CPACK_DEBIAN_PACKAGE_VERSION 0.3.0)
 
+set(CPACK_PACKAGING_INSTALL_PREFIX "/usr/local")
+
 include(CPack)
+
+if(${DEVELOPMENT})
+    set(UI_PATH "src")
+else(${DEVELOPMENT})
+    set(UI_PATH "${CPACK_PACKAGING_INSTALL_PREFIX}/share/gcowboy")
+endif(${DEVELOPMENT})
+
+configure_file(src/config.vala.in src/config.vala)
 
 # RTM TEST
 
