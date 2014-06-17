@@ -25,3 +25,6 @@ gcowboy
 rtm_test
 install_manifest.txt
 *~
+CPack*
+_CPack*
+*.deb
