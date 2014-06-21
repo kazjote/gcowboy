@@ -15,153 +15,38 @@
  * with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-using GLib;
 using Gtk;
 
 public class Main : Object
 {
+    public MainLoop loop;
 
-    private InfoBar infobar;
-    private Models.TaskRepository task_repository;
-    private Views.NotificationAreaView notification_area_view;
-    private Views.NewTaskView new_task_view;
-    private Views.TaskListsView task_lists_view;
-    private Controllers.SearchController search_controller;
+    public WindowBootstrap window_bootstrap { private set; public get; }
+    public DBusBootstrap dbus_bootstrap { private set; public get; }
 
-    public MainLoop loop; // TODO: Refactor
-
-    /* 
-     * Uncomment this line when you are done testing and building a tarball
-     * or installing
-     */
-
-    public Main (RtmWrapper rtm)
+    public Main ()
     {
-        try
-        {
-            var builder = new Builder ();
-            builder.add_from_file (Config.GCOWBOY_UI_FILE);
+        loop = new MainLoop ();
 
-            var window = builder.get_object ("window") as Window;
+        dbus_bootstrap = new DBusBootstrap ();
 
-            window.set_events (Gdk.EventType.ENTER_NOTIFY);
-            window.destroy.connect(() => {
-                loop.quit ();
-                Gtk.main_quit();
-            });
+        dbus_bootstrap.name_aquired.connect (() => {
+            window_bootstrap = new WindowBootstrap (loop);
+            window_bootstrap.bootstrap ();
+        });
 
-            var screen = Gdk.Screen.get_default ();
-            var css_provider = new CssProvider(); 
-            css_provider.load_from_file (File.new_for_path (Config.GCOWBOY_CSS_FILE));
+        dbus_bootstrap.name_exists.connect (() => {
+            loop.quit ();
+        });
 
-            Gtk.StyleContext.add_provider_for_screen (screen, css_provider, STYLE_PROVIDER_PRIORITY_APPLICATION);
-
-            var list_view = builder.get_object ("list_view") as TreeView;
-
-            var cell = new Gtk.CellRendererText ();
-            list_view.insert_column_with_attributes (-1, "Lists", cell, "text", 0);
-
-            infobar = builder.get_object ("infobar") as InfoBar;
-
-            var notification_bar = builder.get_object ("NotificationBar") as InfoBar;
-            notification_area_view = new Views.NotificationAreaView (notification_bar);
-
-            var task_box = builder.get_object ("task_box") as Box;
-            task_repository = new Models.TaskRepository (rtm);
-
-            var task_lists_model = new Models.TaskListsModel (task_repository, rtm);
-
-            task_lists_view = new Views.TaskListsView (task_lists_model, list_view, task_box, notification_area_view);
-            task_lists_model.fetch ();
-
-            var new_task_entry = builder.get_object ("NewTaskEntry") as Entry;
-            new_task_view = new Views.NewTaskView (new_task_entry, task_repository, notification_area_view);
-
-            var search_entry = builder.get_object ("SearchEntry") as Entry;
-            search_controller = new Controllers.SearchController (search_entry, task_repository, rtm, task_lists_model, task_lists_view);
-
-            window.show ();
-
-            infobar.hide ();
-        } 
-        catch (Error e) {
-            stderr.printf ("Could not load UI: %s\n", e.message);
-        } 
-
+        dbus_bootstrap.bootstrap ();
     }
 
     static int main (string[] args) 
     {
         Gtk.init (ref args);
 
-        var response_queue = new AsyncQueue<QueueMessage> ();
-
-        var rtm = new RtmWrapper (response_queue);
-
-        var token_file_path = Environment.get_home_dir () + "/.gcowboy_token";
-
-        try {
-
-            var file = File.new_for_path (token_file_path);
-
-            if (file.query_exists ()) {
-                var dis = new DataInputStream (file.read ());
-                var token = dis.read_line ();
-                rtm.set_token (token);
-            }
-        } catch (Error e) {
-            stderr.printf ("Can't load token for a file %s\n", e.message);
-        }
-
-        var app = new Main (rtm);
-
-        rtm.authorization.connect((t, url) => {
-            app.infobar.add_button ("Authorize", 1);
-
-            Container content = app.infobar.get_content_area ();
-            content.add (new Gtk.Label ("Authorization needed."));
-
-            app.infobar.show_all ();
-
-            app.infobar.response.connect ((id) => {
-                try {
-                    AppInfo.launch_default_for_uri (url, null);
-                } catch (Error e) {
-                    stderr.printf ("Can't run browser!");
-                }
-            });
-        });
-
-        rtm.authenticated.connect((t, token) => {
-            app.infobar.hide ();
-
-            try {
-                var file = File.new_for_path (token_file_path);
-
-                if (file.query_exists ()) file.delete ();
-
-                var dos = new DataOutputStream (file.create (FileCreateFlags.REPLACE_DESTINATION));
-
-                dos.put_string (token);
-            } catch (Error e) {
-                stderr.printf ("Can't save token to a file\n");
-            }
-
-        });
-
-        app.loop = new MainLoop ();
-        TimeoutSource time = new TimeoutSource (200);
-
-        time.set_callback (() => {
-            var queue_message = response_queue.try_pop ();
-
-            if (queue_message != null) {
-                queue_message.callback (queue_message);
-            }
-            return true;
-        });
-
-        time.attach (app.loop.get_context ());
+        var app = new Main ();
 
         app.loop.run ();
 

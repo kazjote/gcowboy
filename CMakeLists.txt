@@ -46,7 +46,10 @@ set(GCOWBOY_SRC
     src/gcowboy.vala
     src/queue_message.vala
     src/queue_processor.vala
+    src/dbus_server.vala
     src/rtm_wrapper.vala
+    src/window_bootstrap.vala
+    src/dbus_bootstrap.vala
     src/views/task_view.vala
     src/views/tasks_view.vala
     src/views/task_lists_view.vala
