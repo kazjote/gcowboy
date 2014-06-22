@@ -13,6 +13,8 @@ public class WindowBootstrap : Object
     private MainLoop loop;
     private AsyncQueue<QueueMessage> response_queue;
 
+    private Window window { get; set; }
+
     public WindowBootstrap (MainLoop _loop)
     {
         loop = _loop;
@@ -25,6 +27,11 @@ public class WindowBootstrap : Object
         setup_rtm_events ();
     }
 
+    public void show_window ()
+    {
+        window.show ();
+    }
+
     private void setup_interface ()
     {
         try
@@ -32,12 +39,11 @@ public class WindowBootstrap : Object
             var builder = new Builder ();
             builder.add_from_file (Config.GCOWBOY_UI_FILE);
 
-            var window = builder.get_object ("window") as Window;
+            window = builder.get_object ("window") as Window;
 
-            window.set_events (Gdk.EventType.ENTER_NOTIFY);
-            window.destroy.connect(() => {
-                loop.quit ();
-                Gtk.main_quit();
+            window.delete_event.connect(() => {
+                window.hide ();
+                return true;
             });
 
             var screen = Gdk.Screen.get_default ();
@@ -57,7 +63,6 @@ public class WindowBootstrap : Object
             notification_area_view = new Views.NotificationAreaView (notification_bar);
 
             var task_box = builder.get_object ("task_box") as Box;
-            task_repository = new Models.TaskRepository (rtm);
 
             var task_lists_model = new Models.TaskListsModel (task_repository, rtm);
 
@@ -103,6 +108,7 @@ public class WindowBootstrap : Object
             stderr.printf ("Can't load token for a file %s\n", e.message);
         }
 
+        task_repository = new Models.TaskRepository (rtm);
     }
 
     private void setup_rtm_events ()

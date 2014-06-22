@@ -35,8 +35,13 @@ public class Main : Object
             window_bootstrap.bootstrap ();
         });
 
+        dbus_bootstrap.opened.connect (() => {
+            window_bootstrap.show_window ();
+        });
+
         dbus_bootstrap.name_exists.connect (() => {
             loop.quit ();
+            Gtk.main_quit();
         });
 
         dbus_bootstrap.bootstrap ();
