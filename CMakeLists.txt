@@ -1,14 +1,14 @@
 cmake_minimum_required (VERSION 2.6)
 
 list(APPEND CMAKE_MODULE_PATH
-    ${CMAKE_SOURCE_DIR}/cmake
+    ${CMAKE_SOURCE_DIR}/cmake/vala
 )
 
-find_package(Vala REQUIRED)
-include(${VALA_USE_FILE})
+include(ValaPrecompile)
 
 project (GCowboy)
 
+find_package(Vala)
 find_package(PkgConfig)
 
 pkg_check_modules(GTK REQUIRED gtk+-3.0)
@@ -17,13 +17,18 @@ pkg_check_modules(LIBXML REQUIRED libxml-2.0)
 pkg_check_modules(LIBSOUP REQUIRED libsoup-2.4)
 pkg_check_modules(GIO REQUIRED gio-2.0)
 pkg_check_modules(GTHREAD REQUIRED gthread-2.0)
+pkg_check_modules(LIBWNCK REQUIRED libwnck-3.0)
+pkg_check_modules(X11 REQUIRED gdk-x11-3.0)
 
 add_definitions(${GTK_CFLAGS} ${GTK_CFLAGS_OTHER}
     ${GEE_CFLAGS} ${GEE_CFLAGS_OTHER}
     ${LIBXML_CFLAGS} ${LIBXML_CFLAGS_OTHER}
     ${LIBSOUP_CFLAGS} ${LIBSOUP_CFLAGS_OTHER}
-    ${GIO_CFLAGS} ${GIO_CFLAGS_OTHER} -w)
-link_libraries(${GTK_LIBRARIES} ${LIBXML_LIBRARIES} ${LIBSOUP_LIBRARIES} ${GTHREAD_LIBRARIES} ${GEE_LIBRARIES})
+    ${LIBWNCK_CFLAGS} ${LIBWNCK_CFLAGS_OTHER}
+    ${GIO_CFLAGS} ${GIO_CFLAGS_OTHER}
+    -w
+    -DWNCK_I_KNOW_THIS_IS_UNSTABLE)
+link_libraries(${GTK_LIBRARIES} ${LIBXML_LIBRARIES} ${LIBSOUP_LIBRARIES} ${GTHREAD_LIBRARIES} ${GEE_LIBRARIES} ${LIBWNCK_LIBRARIES})
 link_directories(${GTK_LIBRARY_DIRS})
 
 set(RTM_SRC
@@ -82,6 +87,8 @@ set(GCOWBOY_PACKAGES
     libxml-2.0
     libsoup-2.4
     gio-2.0
+    libwnck-3.0
+    gdk-x11-3.0
 )
 
 vala_precompile(VALA_GCOWBOY_C
@@ -91,6 +98,7 @@ PACKAGES
     ${GCOWBOY_PACKAGES}
 OPTIONS
     --thread
+    --vapidir=${CMAKE_SOURCE_DIR}/vapi/
 )
 
 add_executable(gcowboy ${VALA_GCOWBOY_C})

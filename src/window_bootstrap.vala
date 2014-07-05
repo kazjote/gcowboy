@@ -30,6 +30,8 @@ public class WindowBootstrap : Object
     public void show_window ()
     {
         window.show ();
+        var xid = Gdk.X11Window.get_xid(window.get_window());
+        Wnck.Window.get(xid).activate (100);
     }
 
     private void setup_interface ()
