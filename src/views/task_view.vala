@@ -109,7 +109,7 @@ namespace Views
                 _time_title.hide ();
             }
 
-            name_label.label = shorten (model.name, 40);
+            name_label.label = model.name;
         }
 
         private string shorten (string caption, int max_length) {
