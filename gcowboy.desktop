@@ -1,0 +1,8 @@
+[Desktop Entry]
+Type=Application
+Encoding=UTF-8
+Name=GCowboy
+Comment=Remember the Milk client
+Exec=gcowboy
+Icon=gcowboy.svg
+Terminal=false

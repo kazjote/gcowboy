@@ -89,6 +89,7 @@ set(GCOWBOY_PACKAGES
     gio-2.0
     libwnck-3.0
     gdk-x11-3.0
+    gdk-x11-3.0
 )
 
 vala_precompile(VALA_GCOWBOY_C
@@ -109,6 +110,8 @@ INSTALL(TARGETS gcowboy
 
 INSTALL(DIRECTORY src/ui DESTINATION share/gcowboy
         FILES_MATCHING REGEX ".(ui|css)")
+INSTALL(FILES gcowboy.desktop DESTINATION share/applications)
+INSTALL(FILES gcowboy.svg DESTINATION share/icons)
 
 set(CPACK_GENERATOR DEB)
 set(CPACK_DEBIAN_PACKAGE_DEPENDS "debhelper (>= 8.0.0), cmake, valac, libgtk-3-dev, libgee-dev, libxml2-dev, libsoup2.4-dev")
