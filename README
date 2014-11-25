@@ -1,3 +1,3 @@
 # Dependencies
 
-sudo apt-get install libgee-dev libxml2-dev libsoup2.4-dev
+sudo apt-get install libgee-dev libxml2-dev libsoup2.4-dev libwnck-3-dev
